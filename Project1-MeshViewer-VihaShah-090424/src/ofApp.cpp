@@ -1,8 +1,13 @@
 #include "ofApp.h"
+#include "Mesh.h"
+#include "ofFileUtils.h"
 
 //--------------------------------------------------------------
-void ofApp::setup(){
-
+void ofApp::setup() {
+  ofFile file = ofFile();
+  file.open("arm_rig_wf.obj", ofFile::ReadOnly);
+  
+  Mesh mesh(file); //initialzies the mesh and populates the 
 }
 
 //--------------------------------------------------------------

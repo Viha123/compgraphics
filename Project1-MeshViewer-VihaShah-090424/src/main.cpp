@@ -2,7 +2,7 @@
 #include "ofApp.h"
 
 //========================================================================
-int main( ){
+int main(){
 
 	//Use ofGLFWWindowSettings for more options like multi-monitor fullscreen
 	ofGLWindowSettings settings;
@@ -11,6 +11,7 @@ int main( ){
 
 	auto window = ofCreateWindow(settings);
 
+  
 	ofRunApp(window, std::make_shared<ofApp>());
 	ofRunMainLoop();
 

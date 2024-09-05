@@ -320,7 +320,8 @@ obj/linux64/Release/src/ofApp.o: src/ofApp.cpp src/ofApp.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/video/ofVideoPlayer.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/of3dUtils.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofCamera.h \
- /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofEasyCam.h
+ /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofEasyCam.h \
+ src/Mesh.h
 src/ofApp.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/ofMain.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofConstants.h:
@@ -644,3 +645,4 @@ src/ofApp.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/of3dUtils.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofCamera.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofEasyCam.h:
+src/Mesh.h:
