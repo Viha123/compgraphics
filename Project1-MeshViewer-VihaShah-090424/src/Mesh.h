@@ -2,14 +2,15 @@
 #include "ofFileUtils.h"
 #include <vector>
 #include <array>
+#include "ofxGui.h"
 class Mesh {
 
 public:
-  Mesh(ofFile path);
+  Mesh();
   void draw();
-
-  std::vector<std::array<float,3>> triangles; // The vertices would be stored in here
-  std::vector<int> triangleIndex;  // The index of the triangles that make up a
+  void loadFile(ofFile file);
+  std::vector<glm::vec3> triangles; // The vertices would be stored in here
+  std::vector<std::array<int,3>> triangleIndex;  // The index of the triangles that make up a
                                    // mesh are located here
 
 private:

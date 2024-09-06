@@ -1,13 +1,15 @@
 #include "ofApp.h"
 #include "Mesh.h"
+#include "of3dUtils.h"
 #include "ofFileUtils.h"
 
 //--------------------------------------------------------------
 void ofApp::setup() {
   ofFile file = ofFile();
-  file.open("arm_rig_wf.obj", ofFile::ReadOnly);
-  
-  Mesh mesh(file); //initialzies the mesh and populates the 
+  file.open("chessTriangle.obj", ofFile::ReadOnly);
+  cam.setDistance(10.0);
+  ofNoFill();
+  mesh.loadFile(file); // initialzies the mesh and populates the
 }
 
 //--------------------------------------------------------------
@@ -17,7 +19,11 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-
+  cam.begin();
+  ofSetColor(0, 0, 0);
+  ofDrawGrid(1);
+  mesh.draw();
+  cam.end();
 }
 
 //--------------------------------------------------------------

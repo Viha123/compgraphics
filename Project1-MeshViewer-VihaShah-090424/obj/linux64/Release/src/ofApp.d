@@ -52,7 +52,6 @@ obj/linux64/Release/src/ofApp.o: src/ofApp.cpp src/ofApp.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofThread.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofThreadChannel.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofJson.h \
- /home/vihashah/dev/graphics/openFrameworks/libs/json/include/nlohmann/json.hpp \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/types/ofParameter.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/types/ofPoint.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/math/ofVec3f.h \
@@ -321,7 +320,19 @@ obj/linux64/Release/src/ofApp.o: src/ofApp.cpp src/ofApp.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/of3dUtils.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofCamera.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofEasyCam.h \
- src/Mesh.h
+ src/Mesh.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGui.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxToggle.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxBaseGui.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxSlider.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxInputField.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGuiUtils.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxSliderGroup.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGuiGroup.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxButton.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxLabel.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxColorPicker.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxPanel.h
 src/ofApp.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/ofMain.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofConstants.h:
@@ -376,7 +387,6 @@ src/ofApp.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofThread.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofThreadChannel.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofJson.h:
-/home/vihashah/dev/graphics/openFrameworks/libs/json/include/nlohmann/json.hpp:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/types/ofParameter.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/types/ofPoint.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/math/ofVec3f.h:
@@ -646,3 +656,15 @@ src/ofApp.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofCamera.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofEasyCam.h:
 src/Mesh.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGui.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxToggle.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxBaseGui.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxSlider.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxInputField.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGuiUtils.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxSliderGroup.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGuiGroup.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxButton.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxLabel.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxColorPicker.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxPanel.h:

@@ -1,12 +1,16 @@
 #include "Mesh.h"
+#include "fwd.hpp"
+#include "ofFileUtils.h"
+#include "ofGraphics.h"
 #include <cassert>
 #include <string>
-
-Mesh::Mesh(ofFile file) {
+#include "ofGraphics.h"
+Mesh::Mesh() {}
+void Mesh::loadFile(ofFile file) {
   m_file = file;
   populateData();
 }
-
+ 
 void Mesh::populateData() {
   assert(m_file.canRead());
   ofBuffer buffer = m_file.readToBuffer();
@@ -18,29 +22,52 @@ void Mesh::populateData() {
       vertices++;
       line = line.substr(2);
       int idx = line.find(" ");
-      std::array<float, 3> vertex;
+      std::array<double, 3> vertex;
       while (i < 3) {
 
         std::string number = line.substr(0, idx);
-        std::cout << number << std::endl;
+        // std::cout << number << std::endl;
         
-        float value = std::stof(number);
+        double value = std::stod(number);
         vertex[i] = value;
         i += 1;
         line = line.substr(idx+1);
         idx = line.find(" ");
       }
       assert(i == 2);
-      triangles.emplace_back(vertex);
-      std::cout << "saw vertex: " << vertex[0] << " "<< vertex[1] << " " << vertex[2] << " "<< std::endl;
+      if (vertex[0] == 0 || vertex[1] == 0|| vertex[2] == 0) {
+        std::cout<< line << std::endl;
+      }
+      triangles.emplace_back(glm::vec3(vertex[0], vertex[1], vertex[2]));
     }
     if (line.starts_with("f ")) {
       faces++;
-      std::cout << "saw face" << std::endl;
+      line = line.substr(2);
+      int idx = line.find(" ");
+      std::array<int, 3> vertexIndex;
+      while (i < 3) {
+
+        std::string number = line.substr(0, idx);
+        // std::cout << number << std::endl;
+        
+        int value = std::stoi(number);
+        vertexIndex[i] = value;
+        i += 1;
+        line = line.substr(idx+1);
+        idx = line.find(" ");
+      }
+      assert (i == 2);
+      triangleIndex.emplace_back(vertexIndex);
       
     }
   }
 
-  std::cout << vertices << "  faces: " << faces << std::endl;
+  std::cout << "Vertices: " << vertices << " Faces: " << faces << " Total KBytes: " << ((vertices * 24) + (faces * 12)) / 1000 << std::endl;
+}
 
+void Mesh::draw() {
+  for (auto triangle : triangleIndex) {
+    ofDrawTriangle(triangles[triangle[0]], triangles[triangle[1]], triangles[triangle[2]]);
+  }
+  
 }
