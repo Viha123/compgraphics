@@ -2,6 +2,8 @@
 
 #include "ofMain.h"
 #include "Mesh.h"
+#include "ofxPanel.h"
+#include "ofxSlider.h"
 class ofApp : public ofBaseApp{
 
 	public:
@@ -21,8 +23,13 @@ class ofApp : public ofBaseApp{
 		void mouseExited(int x, int y) override;
 		void windowResized(int w, int h) override;
 		void dragEvent(ofDragInfo dragInfo) override;
-    void gotMessage(ofMessage msg) override;
-
+                void gotMessage(ofMessage msg) override;
+                
+    bool normalsHide = false;
+    ofxFloatSlider normalLength;
+    ofxFloatSlider beta;
+    ofxFloatSlider gamma;
+    ofxPanel gui;
     ofEasyCam cam;
     Mesh mesh;
 
