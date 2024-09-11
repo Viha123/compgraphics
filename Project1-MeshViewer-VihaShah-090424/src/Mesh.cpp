@@ -1,5 +1,7 @@
 #include "Mesh.h"
 #include "fwd.hpp"
+#include "of3dGraphics.h"
+#include "ofColor.h"
 #include "ofFileUtils.h"
 #include "ofGraphics.h"
 #include <cassert>
@@ -67,7 +69,9 @@ void Mesh::populateData() {
 
 void Mesh::draw() {
   for (auto triangle : triangleIndex) {
-    ofDrawTriangle(triangles[triangle[0]], triangles[triangle[1]], triangles[triangle[2]]);
+    ofDrawTriangle(triangles[triangle[0]], triangles[triangle[1]],
+                   triangles[triangle[2]]);
+    
   }
 }
 
@@ -76,19 +80,25 @@ void Mesh::drawNormals(float beta, float gamma) {
   
   std::cout << triangleIndex.size() << std::endl;
   for (auto triangle : triangleIndex) {
-    // p1, p2 and p3 form a triangle
-    // float px = alpha * triangles[triangle[0]] + beta * triangles[triangle[0]]
-    // +
-    //            gamma * triangles[triangle[0]];
-    // float py = alpha * triangles[triangle[1]] + beta * triangles[triangle[1]]
-    // + gamma * triangles[triangle[1]]; float pz = alpha *
-    // triangles[triangle[2]] + beta * triangles[triangle[2]] +
-    //            gamma * triangles[triangle[2]];
+    ofSetColor(255, 0, 0);
     std::cout << triangle[0] << " " << triangle[1] << " " << triangle[2] << std::endl;
     auto center = triangles[triangle[0]] + beta * (triangles[triangle[1]] - triangles[triangle[0]]) + gamma * (triangles[triangle[2]]  - triangles[triangle[0]]);
-    std::cout << "Center: " << center << std::endl;
-
-    ofDrawCircle(center, 0.05);
+    auto cross =
+        computeCrossProduct((triangles[triangle[0]] - triangles[triangle[1]]), (triangles[triangle[0]] - triangles[triangle[2]]));
+    ofDrawLine(center, cross);
+    ofSetColor(0, 255, 0);
+    // ofDrawLine(center, cross * -1);
+    ofDrawSphere(center, 0.05);
     
   }
+}
+
+glm::vec3 Mesh::computeCrossProduct(glm::vec3 a, glm::vec3 b) {
+  std::cout << a << " " << b << std::endl;
+  float x = (a[1] * b[2]) - (a[2]* b[1]);
+  float y = -(a[0] * b[2]) + (a[2] * b[0]);
+  float z = (a[0] * b[1]) - (a[1] * b[0]);
+  std::cout << x << " " << y << " " << z << std::endl;
+  return glm::vec3(x, y, z);
+  
 }
