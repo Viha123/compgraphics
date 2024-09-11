@@ -7,13 +7,16 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
   ofFile file = ofFile();
-  file.open("test.obj", ofFile::ReadOnly);
+  file.open("chessTriangle.obj", ofFile::ReadOnly);
   cam.setDistance(10.0);
+  cam.setNearClip(0.1);
   ofNoFill();
   mesh.loadFile(file); // initialzies the mesh and populates the
   gui.setup();
   gui.add(beta.setup("Beta", 0.33, 0, 1));
   gui.add(gamma.setup("Gamma", 0.33, 0, 1));
+  gui.add(size.setup("Size Factor", 5, 1, 100));
+
 
 }
 
@@ -27,7 +30,7 @@ void ofApp::draw() {
   // ofDrawGrid(1);
   mesh.draw();
   
-  mesh.drawNormals(beta, gamma);
+  mesh.drawNormals(beta, gamma, size);
   cam.end();
   gui.draw();
 }

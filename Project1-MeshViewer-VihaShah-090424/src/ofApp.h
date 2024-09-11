@@ -29,6 +29,7 @@ class ofApp : public ofBaseApp{
     ofxFloatSlider normalLength;
     ofxFloatSlider beta;
     ofxFloatSlider gamma;
+    ofxFloatSlider size;
     ofxPanel gui;
     ofEasyCam cam;
     Mesh mesh;

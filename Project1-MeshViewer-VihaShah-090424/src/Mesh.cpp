@@ -1,6 +1,7 @@
 #include "Mesh.h"
 #include "fwd.hpp"
 #include "of3dGraphics.h"
+#include "of3dUtils.h"
 #include "ofColor.h"
 #include "ofFileUtils.h"
 #include "ofGraphics.h"
@@ -75,30 +76,29 @@ void Mesh::draw() {
   }
 }
 
-void Mesh::drawNormals(float beta, float gamma) {
-  // float alpha = 0.33;
+void Mesh::drawNormals(float beta, float gamma, float size) {
+  // float beta = 0.33;
+  // float gamma = 0.33;
   
-  std::cout << triangleIndex.size() << std::endl;
   for (auto triangle : triangleIndex) {
-    ofSetColor(255, 0, 0);
-    std::cout << triangle[0] << " " << triangle[1] << " " << triangle[2] << std::endl;
+    // std::cout << triangle[0] << " " << triangle[1] << " " << triangle[2] << std::endl;
     auto center = triangles[triangle[0]] + beta * (triangles[triangle[1]] - triangles[triangle[0]]) + gamma * (triangles[triangle[2]]  - triangles[triangle[0]]);
+    ofSetColor(255, 100, 0);
     auto cross =
-        computeCrossProduct((triangles[triangle[0]] - triangles[triangle[1]]), (triangles[triangle[0]] - triangles[triangle[2]]));
-    ofDrawLine(center, cross);
-    ofSetColor(0, 255, 0);
-    // ofDrawLine(center, cross * -1);
-    ofDrawSphere(center, 0.05);
+        computeCrossProduct((center - triangles[triangle[1]]),
+                            (center - triangles[triangle[0]]));
+
+    ofDrawLine(center, (size * cross * -1) + center);
     
   }
 }
 
 glm::vec3 Mesh::computeCrossProduct(glm::vec3 a, glm::vec3 b) {
-  std::cout << a << " " << b << std::endl;
+  // std::cout << a << " " << b << std::endl;
   float x = (a[1] * b[2]) - (a[2]* b[1]);
   float y = -(a[0] * b[2]) + (a[2] * b[0]);
   float z = (a[0] * b[1]) - (a[1] * b[0]);
-  std::cout << x << " " << y << " " << z << std::endl;
+  // std::cout << x << " " << /y << " " << z << std::endl;
   return glm::vec3(x, y, z);
   
 }
