@@ -24,5 +24,10 @@ public:
   ofxFloatSlider beta, gamma;
   ofxPanel gui;
 	vector<glm::vec3> verts;
-
+	vector<std::array<glm::vec3,3>> triangles;
+  glm::vec3 intersectionPoint;
+  glm::vec3 lineStart;
+  glm::vec3 lineEnd;
+  bool intersects;
+        
 };

@@ -13,8 +13,7 @@ void ofApp::setup() {
   ofNoFill();
   mesh.loadFile(file); // initialzies the mesh and populates the
   gui.setup();
-  gui.add(beta.setup("Beta", 0.33, 0, 1));
-  gui.add(gamma.setup("Gamma", 0.33, 0, 1));
+
   gui.add(size.setup("Size Factor", 5, 1, 100));
 
 
@@ -30,7 +29,7 @@ void ofApp::draw() {
   // ofDrawGrid(1);
   mesh.draw();
   
-  mesh.drawNormals(beta, gamma, size);
+  mesh.drawNormals(size);
   cam.end();
   gui.draw();
 }

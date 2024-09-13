@@ -76,9 +76,9 @@ void Mesh::draw() {
   }
 }
 
-void Mesh::drawNormals(float beta, float gamma, float size) {
-  // float beta = 0.33;
-  // float gamma = 0.33;
+void Mesh::drawNormals(float size) {
+  float beta = 0.33;
+  float gamma = 0.33;
   
   for (auto triangle : triangleIndex) {
     // std::cout << triangle[0] << " " << triangle[1] << " " << triangle[2] << std::endl;
