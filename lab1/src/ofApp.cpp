@@ -39,14 +39,14 @@ void ofApp::draw() {
   //
   //
 
-    ofDrawTriangle(verts[0], verts[1], verts[2]);
-    ofDrawTriangle(verts[0], verts[2], verts[3]);
+  ofDrawTriangle(verts[0], verts[1], verts[2]);
+  ofDrawTriangle(verts[0], verts[2], verts[3]);
 
-    // sides
-    //
-    ofDrawTriangle(verts[0], verts[1], verts[4]);
-    ofDrawTriangle(verts[1], verts[2], verts[4]);
-    ofDrawTriangle(verts[2], verts[3], verts[4]);
+  // sides
+  //
+  ofDrawTriangle(verts[0], verts[1], verts[4]);
+  ofDrawTriangle(verts[1], verts[2], verts[4]);
+  ofDrawTriangle(verts[2], verts[3], verts[4]);
   ofDrawTriangle(verts[3], verts[0], verts[4]);
 
   // draw little sphere at a barycentric coordinate
@@ -106,8 +106,8 @@ void ofApp::mouseMoved(int x, int y) {
       if (t < smallestT) {
         smallestT = t;
         lineStart = cam.getPosition();
-		lineEnd = cam.getPosition() + (origin - cam.getPosition()) * t;
-		intersectionPoint = cam.getPosition() + (origin - cam.getPosition()) * t;
+        lineEnd = cam.getPosition() + (origin - cam.getPosition()) * t;
+        intersectionPoint = cam.getPosition() + (origin - cam.getPosition()) * t;
 	  }
       intersects = true;
       

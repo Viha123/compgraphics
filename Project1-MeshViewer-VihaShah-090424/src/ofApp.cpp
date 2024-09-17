@@ -3,6 +3,7 @@
 #include "of3dUtils.h"
 #include "ofAppRunner.h"
 #include "ofFileUtils.h"
+#include "ofxBaseGui.h"
 
 //--------------------------------------------------------------
 void ofApp::setup() {
@@ -13,7 +14,6 @@ void ofApp::setup() {
   ofNoFill();
   mesh.loadFile(file); // initialzies the mesh and populates the
   gui.setup();
-
   gui.add(size.setup("Size Factor", 5, 1, 100));
 
 
@@ -28,8 +28,9 @@ void ofApp::draw() {
   ofSetColor(0, 0, 0);
   // ofDrawGrid(1);
   mesh.draw();
-  
-  mesh.drawNormals(size);
+  if (!normalsHide) {
+    mesh.drawNormals(size);
+  }
   cam.end();
   gui.draw();
 }
@@ -43,9 +44,9 @@ void ofApp::keyPressed(int key) {
     case 'f':
       ofToggleFullscreen();
       break;
-    // case 'h':
-    //   bHide = !bHide;
-    //   break;
+    case 'h':
+      normalsHide = !normalsHide;
+      break;
   };
 }
 

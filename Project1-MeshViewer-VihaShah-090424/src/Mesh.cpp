@@ -1,8 +1,5 @@
 #include "Mesh.h"
 #include "fwd.hpp"
-#include "of3dGraphics.h"
-#include "of3dUtils.h"
-#include "ofColor.h"
 #include "ofFileUtils.h"
 #include "ofGraphics.h"
 #include <cassert>
@@ -12,6 +9,25 @@ Mesh::Mesh() {}
 void Mesh::loadFile(ofFile file) {
   m_file = file;
   populateData();
+  computeNormals();
+}
+
+void Mesh::computeNormals() {
+  float beta = 0.33;
+  float gamma = 0.33;
+  
+  for (auto triangle : triangleIndex) {
+    // std::cout << triangle[0] << " " << triangle[1] << " " << triangle[2] << std::endl;
+    auto center = triangles[triangle[0]] + beta * (triangles[triangle[1]] - triangles[triangle[0]]) + gamma * (triangles[triangle[2]]  - triangles[triangle[0]]);
+    
+    auto cross =
+        computeCrossProduct((center - triangles[triangle[1]]),
+                            (center - triangles[triangle[0]]));
+
+    // center and cross product
+    normalVectors.push_back({center, cross});
+    
+  }
 }
  
 void Mesh::populateData() {
@@ -65,7 +81,7 @@ void Mesh::populateData() {
     }
   }
 
-  std::cout << "Vertices: " << vertices << " Faces: " << faces << " Total KBytes: " << ((vertices * 24) + (faces * 12)) / 1000 << std::endl;
+  std::cout << "Vertices: " << vertices << " Faces: " << faces << " Total KBytes: " << ((vertices * 24) + (faces * 12)) /  1000 << std::endl;
 }
 
 void Mesh::draw() {
@@ -77,19 +93,9 @@ void Mesh::draw() {
 }
 
 void Mesh::drawNormals(float size) {
-  float beta = 0.33;
-  float gamma = 0.33;
-  
-  for (auto triangle : triangleIndex) {
-    // std::cout << triangle[0] << " " << triangle[1] << " " << triangle[2] << std::endl;
-    auto center = triangles[triangle[0]] + beta * (triangles[triangle[1]] - triangles[triangle[0]]) + gamma * (triangles[triangle[2]]  - triangles[triangle[0]]);
+  for (auto normal : normalVectors) {
     ofSetColor(255, 100, 0);
-    auto cross =
-        computeCrossProduct((center - triangles[triangle[1]]),
-                            (center - triangles[triangle[0]]));
-
-    ofDrawLine(center, (size * cross * -1) + center);
-    
+    ofDrawLine(normal[0], (size * normal[1] * -1) + normal[0]);
   }
 }
 

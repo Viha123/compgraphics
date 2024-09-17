@@ -290,12 +290,7 @@ obj/linux64/Release/src/Mesh.o: src/Mesh.cpp src/Mesh.h \
  /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxColorPicker.h \
  /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxPanel.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/graphics/ofImage.h \
- /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/gl/ofGLBaseTypes.h \
- /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/graphics/of3dGraphics.h \
- /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/of3dPrimitives.h \
- /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofMesh.h \
- /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofNode.h \
- /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/of3dUtils.h
+ /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/gl/ofGLBaseTypes.h
 src/Mesh.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofFileUtils.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofConstants.h:
@@ -589,8 +584,3 @@ src/Mesh.h:
 /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxPanel.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/graphics/ofImage.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/gl/ofGLBaseTypes.h:
-/home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/graphics/of3dGraphics.h:
-/home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/of3dPrimitives.h:
-/home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofMesh.h:
-/home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofNode.h:
-/home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/of3dUtils.h:

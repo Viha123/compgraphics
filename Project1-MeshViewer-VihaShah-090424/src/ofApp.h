@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "Mesh.h"
+#include "ofxButton.h"
 #include "ofxPanel.h"
 #include "ofxSlider.h"
 class ofApp : public ofBaseApp{
@@ -25,7 +26,7 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo) override;
                 void gotMessage(ofMessage msg) override;
                 
-    bool normalsHide = false;
+    bool normalsHide = true;
     ofxFloatSlider normalLength;
     ofxFloatSlider beta;
     ofxFloatSlider gamma;
