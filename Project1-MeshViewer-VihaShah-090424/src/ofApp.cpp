@@ -15,7 +15,7 @@ void ofApp::setup() {
   mesh.loadFile(file); // initialzies the mesh and populates the
   gui.setup();
   gui.add(size.setup("Size Factor", 5, 1, 100));
-
+  
 
 }
 
