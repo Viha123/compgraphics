@@ -115,10 +115,10 @@ void ofApp::setup() {
   previewCam.setNearClip(.1);
   previewCam.lookAt(glm::vec3(0, 0, 0));
   theCam = &mainCam;
-  scene.push_back(new Sphere(glm::vec3(-2, 0, -4), 2.0, ofColor::red));
+  scene.push_back(new Sphere(glm::vec3(-2, 0, -4), 3.0, ofColor::red));
 
-  scene.push_back(new Sphere(glm::vec3(2, 0, 0), 1.0, ofColor::green));
-  scene.push_back(new Sphere(glm::vec3(0, 0, -2), 0.5, ofColor::yellow));
+  scene.push_back(new Sphere(glm::vec3(0, 0, 0), 3.0, ofColor::green));
+  // scene.push_back(new Sphere(glm::vec3(0, 0, -2), 3.5, ofColor::yellow));
 
   // // ground plane
   // //
@@ -154,11 +154,7 @@ void ofApp::draw() {
     renderCam.draw();
     theCam->end();
   } else {
-    // theCam->end();
     image.draw(0, 0);
-    // for (auto pixel : image.getPixels().getConstPixelsIter()) {
-    //   std::cout << static_cast<int>(pixel.getComponentsPerPixel()) << " ";
-    // }
   }
 }
 
