@@ -24,7 +24,9 @@ public:
 		plane.setHeight(height);
 		plane.setResolution(4, 4);
 		plane.drawWireframe();
-	}
+        }
+  void print() { std::cout << "Plane" << std::endl; }
+        
 	ofPlanePrimitive plane;
 	float width = 20;
 	float height = 20;

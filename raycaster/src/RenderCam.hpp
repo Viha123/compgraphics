@@ -16,7 +16,10 @@ public:
 		aim = glm::vec3(0, 0, -1);
 	}
 	Ray getRay(float u, float v);
-	void draw() { ofDrawBox(position, 1.0); };
+        void draw() { ofDrawBox(position, 1.0); };
+        void print() {
+          std::cout << "rendercam" << std::endl;
+				}
 	void drawFrustum();
 
 	glm::vec3 aim;

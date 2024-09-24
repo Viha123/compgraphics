@@ -1,5 +1,6 @@
 #include "ofApp.h"
 #include "Primitives/Sphere.hpp"
+#include "geometric.hpp"
 #include "ofColor.h"
 #include "ofGraphicsConstants.h"
 #include "ofPixels.h"
@@ -114,14 +115,15 @@ void ofApp::setup() {
   previewCam.setNearClip(.1);
   previewCam.lookAt(glm::vec3(0, 0, 0));
   theCam = &mainCam;
+  scene.push_back(new Sphere(glm::vec3(-2, 0, -4), 2.0, ofColor::red));
 
-  scene.push_back(new Sphere(glm::vec3(-1, 0, 0), 2.0, ofColor::blue));
-  scene.push_back(new Sphere(glm::vec3(1, 0, -4), 2.0, ofColor::green));
+  scene.push_back(new Sphere(glm::vec3(2, 0, 0), 1.0, ofColor::green));
+  scene.push_back(new Sphere(glm::vec3(0, 0, -2), 0.5, ofColor::yellow));
 
   // // ground plane
   // //
-  // scene.push_back(new Plane(glm::vec3(0, -2, 0), glm::vec3(0, 1, 0),
-  // ofColor::brown));
+  scene.push_back(new Plane(glm::vec3(0, -2, 0), glm::vec3(0, 1, 0),
+  ofColor::brown));
 }
 
 //--------------------------------------------------------------
@@ -136,14 +138,6 @@ void ofApp::draw() {
     ofNoFill();
 
     drawAxis(glm::vec3(0, 0, 0));
-    ;
-
-    //  draw objects in scene
-    //
-    // theCam->begin();
-
-    ofSetColor(ofColor::green);
-    ofNoFill();
 
     //  draw objects in scene
     //
@@ -156,11 +150,15 @@ void ofApp::draw() {
     ofSetColor(ofColor::lightSkyBlue);
     renderCam.drawFrustum();
     renderCam.view.draw();
-    ofSetColor(ofColor::blue);
+    // ofSetColor(ofColor::blue);
     renderCam.draw();
-  } else {
     theCam->end();
+  } else {
+    // theCam->end();
     image.draw(0, 0);
+    // for (auto pixel : image.getPixels().getConstPixelsIter()) {
+    //   std::cout << static_cast<int>(pixel.getComponentsPerPixel()) << " ";
+    // }
   }
 }
 
@@ -218,21 +216,23 @@ void ofApp::keyReleased(int key) {
     break;
   }
 }
-float ofApp::computeU(int i) { return (i + 0.5) / imageWidth; }
-float ofApp::computeV(int j) { return (j + 0.5) / imageHeight; }
+float ofApp::computeU(int j) { return (j + 0.5) / imageWidth; }
+float ofApp::computeV(int i) { return (i + 0.5) / imageHeight; }
 void ofApp::rayTrace() {
   std::cout << "hello im supposed to ray trace here" << std::endl;
   image.allocate(imageWidth, imageHeight, ofImageType::OF_IMAGE_COLOR);
-  ofPixels pixels;
-  pixels.allocate(imageWidth, imageHeight, OF_PIXELS_RGB);
-  int count = 0;
-  for (int i = 0; i < imageWidth; i++) {
-    for (int j = 0; j < imageHeight; j++) {
 
-      Ray renderCamRay = renderCam.getRay( computeU(i), computeV(j));
+  int count = 0;
+  for (int i = 0; i < imageHeight; i++) {
+    for (int j = 0; j < imageWidth; j++) {
+
+      Ray renderCamRay = renderCam.getRay(
+          computeU(j),
+          computeV(imageHeight - i -
+                   1)); // becuase the i is the rows which means y axis
       // std::cout << "\033[32m" << renderCamRay.d << std::endl;
       float closestDistance = std::numeric_limits<float>::max();
-      SceneObject *closestShape;
+      SceneObject *closestShape = nullptr;
       bool intersects = false;
       for (auto shape : scene) {
         glm::vec3 intersectionNormal;
@@ -240,30 +240,28 @@ void ofApp::rayTrace() {
         intersects = shape->intersect(renderCamRay, intersectPosition,
                                       intersectionNormal);
         if (intersects) {
-          auto distance = std::sqrt((std::pow(intersectPosition.x, 2),
-                                     std::pow(intersectPosition.y, 2),
-                                     std::pow(intersectPosition.z, 2)));
+          float distance =
+              abs(glm::distance(intersectPosition, renderCam.position));
+
           if (distance < closestDistance) {
             closestDistance = distance;
             closestShape = shape;
+            // closestShape->print();
           }
         }
       }
-      if (intersects) {
+      if (closestShape != nullptr) {
         count += 1;
-        pixels[imageWidth * i + j + 0] = closestShape->diffuseColor[0];
-        pixels[imageWidth * i + j + 1] = closestShape->diffuseColor[1];
-        pixels[imageWidth * i + j + 2] = closestShape->diffuseColor[2];
+        // closestShape->print();
+        image.setColor(j, i, closestShape->diffuseColor); 
       } else {
-        pixels[imageWidth * i + j + 0] = ofColor::black[0];
-        pixels[imageWidth * i + j + 1] = ofColor::black[1];
-        pixels[imageWidth * i + j + 2] = ofColor::black[2];
+
+        image.setColor(j, i, ofColor::black);
       }
     }
   }
-  image.setFromPixels(pixels);
+  image.update();
   cout << "\033[32m" << count << "\033[0m" << endl;
-
 }
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y) {}

@@ -7,5 +7,8 @@
 //
 class Mesh : public SceneObject {
 	bool intersect(const Ray& ray, glm::vec3& point, glm::vec3& normal) { return false; }
-	void draw() { }
+        void draw() {}
+        void print() {
+          std::cout << "Mesh" << std::endl;
+				}
 };
