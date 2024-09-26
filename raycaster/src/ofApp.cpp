@@ -1,7 +1,9 @@
 #include "ofApp.h"
 #include "Primitives/Sphere.hpp"
+#include "Primitives/ViewPlane.hpp"
 #include "geometric.hpp"
 #include "ofColor.h"
+#include "ofGraphics.h"
 #include "ofGraphicsConstants.h"
 #include "ofPixels.h"
 #include <cmath>
@@ -115,15 +117,15 @@ void ofApp::setup() {
   previewCam.setNearClip(.1);
   previewCam.lookAt(glm::vec3(0, 0, 0));
   theCam = &mainCam;
-  scene.push_back(new Sphere(glm::vec3(-2, 0, -4), 3.0, ofColor::red));
+  scene.push_back(new Sphere(glm::vec3(-3, 0, -5), 4.0, ofColor::blue));
 
   scene.push_back(new Sphere(glm::vec3(0, 0, 0), 3.0, ofColor::green));
   // scene.push_back(new Sphere(glm::vec3(0, 0, -2), 3.5, ofColor::yellow));
 
   // // ground plane
   // //
-  scene.push_back(new Plane(glm::vec3(0, -2, 0), glm::vec3(0, 1, 0),
-  ofColor::brown));
+  scene.push_back(
+      new Plane(glm::vec3(0, -2, 0), glm::vec3(0, 1, 0), ofColor::brown));
 }
 
 //--------------------------------------------------------------
@@ -131,31 +133,39 @@ void ofApp::update() {}
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-  if (!bShowImage) {
-    theCam->begin();
+  theCam->begin();
 
-    ofSetColor(ofColor::green);
-    ofNoFill();
+  ofSetColor(ofColor::green);
+  ofNoFill();
 
-    drawAxis(glm::vec3(0, 0, 0));
+  drawAxis(glm::vec3(0, 0, 0));
 
-    //  draw objects in scene
-    //
-    for (int i = 0; i < scene.size(); i++) {
-      ofSetColor(scene[i]->diffuseColor);
-      scene[i]->draw();
-    }
-
-    ofDisableLighting();
-    ofSetColor(ofColor::lightSkyBlue);
-    renderCam.drawFrustum();
-    renderCam.view.draw();
-    // ofSetColor(ofColor::blue);
-    renderCam.draw();
-    theCam->end();
-  } else {
-    image.draw(0, 0);
+  //  draw objects in scene
+  //
+  for (int i = 0; i < scene.size(); i++) {
+    ofSetColor(scene[i]->diffuseColor);
+    scene[i]->draw();
   }
+
+  ofDisableLighting();
+  ofSetColor(ofColor::lightSkyBlue);
+  renderCam.drawFrustum();
+  renderCam.view.draw();
+  // ofSetColor(ofColor::blue);
+  renderCam.draw();
+  if (bShowImage) {
+
+    glm::vec3 topLeft = renderCam.view.toWorld(0, 0);
+    glm::vec3 topRight = renderCam.view.toWorld(1, 0);
+    glm::vec3 bottomLeft = renderCam.view.toWorld(0, 1);
+
+    float worldWidth = glm::distance(topLeft, topRight);
+    float worldHeight = glm::distance(topLeft, bottomLeft);
+    ofScale(worldWidth / image.getWidth(), worldHeight / image.getHeight());
+    image.draw(imageWidth/-2,imageHeight/-2,
+               renderCam.view.position.z);
+  }
+  theCam->end();
 }
 
 //--------------------------------------------------------------
@@ -242,14 +252,12 @@ void ofApp::rayTrace() {
           if (distance < closestDistance) {
             closestDistance = distance;
             closestShape = shape;
-            // closestShape->print();
           }
         }
       }
       if (closestShape != nullptr) {
         count += 1;
-        // closestShape->print();
-        image.setColor(j, i, closestShape->diffuseColor); 
+        image.setColor(j, i, closestShape->diffuseColor);
       } else {
 
         image.setColor(j, i, ofColor::black);
@@ -285,3 +293,6 @@ void ofApp::gotMessage(ofMessage msg) {}
 
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo) {}
+
+// glm::normalize function
+//
