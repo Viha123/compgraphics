@@ -15,6 +15,7 @@
 #include <exception>
 #include <glm/glm.hpp>
 #include <limits>
+#include "Primitives/Mesh.hpp"
 
 // Intersect Ray with Plane  (wrapper on glm::intersect*
 //
@@ -131,17 +132,22 @@ void ofApp::setup() {
   gui.add(spectacularCoefficient.setup("Spectacular Coefficient", 0.05, 0, 1));
   gui.add(phongExponent.setup("Phong Exponent", 140, 10, 10000));
   // scene.push_back(new Light(glm::vec3(0,5,0)));
-  // lights.push_back(new Light(glm::vec3(3, 3, 0), 100));
+  lights.push_back(new Light(glm::vec3(3, 3, 0), 100));
 
-  lights.push_back(new Light(glm::vec3(1, 5, 1), 50));
-  lights.push_back(new Light(glm::vec3(-2, 4, 4), 150));
-  // lights.push_back(new Light(glm::vec3(0, 0, 11), 10));
+  // lights.push_back(new Light(glm::vec3(1, 5, 1), ~
 
-  scene.push_back(new Sphere(glm::vec3(3, 0, 1), 1.0, ofColor::blue));
+  ofFile file = ofFile();
+  file.open("knight_lowpoly.obj", ofFile::ReadOnly);
+  mesh.loadFile(file);
+  mesh.setColor(ofColor::black);
 
-  scene.push_back(new Sphere(glm::vec3(2, 2, 0), 0.5, ofColor::green));
+  // scene.push_back(new Sphere(glm::vec3(3, 0, 1), 1.0, ofColor::blue));
 
-  scene.push_back(new Sphere(glm::vec3(-1, 0, 2), 1.5, ofColor::red));
+  // scene.push_back(new Sphere(glm::vec3(2, 2, 0), 0.5, ofColor::green));
+
+  // scene.push_back(new Sphere(glm::vec3(-1, 0, 2), 1.5, ofColor::red));
+
+  scene.push_back(&mesh);
 
   // // ground plane
   // //
@@ -194,11 +200,14 @@ void ofApp::draw() {
     image.draw(imageWidth / -2.0, imageHeight / -2.0,
                renderCam.view.position.z);
   }
+  if (!bHide) {
+    mesh.drawNormals(1);
+  }
   theCam->end();
+  ofDisableDepthTest();
   gui.draw();
-  phongExponent.draw();
-  diffuseCoeffient.draw();
-  spectacularCoefficient.draw();
+  ofEnableDepthTest();
+
 }
 
 //--------------------------------------------------------------
@@ -297,7 +306,7 @@ void ofApp::rayTrace() {
         count += 1;
         ofColor color =
             lambert_phong(nearestIntersectPos, nearestIntersectNorm,
-                          closestShape->diffuseColor, ofColor::white, 50);
+                          closestShape->diffuseColor, ofColor::white, phongExponent);
 
         image.setColor(j, i, color);
       } else {

@@ -11,6 +11,7 @@
 #include "ofxPanel.h"
 #include "ofxButton.h"
 #include "ofxGui.h"
+#include "Primitives/Mesh.hpp"
 
 class ofApp : public ofBaseApp {
 
@@ -61,7 +62,7 @@ public:
   RenderCam renderCam;
   ofImage image;
 
-
+  Mesh mesh;
   vector<SceneObject *> scene;
   vector<Light *> lights;
   int imageWidth = 600;

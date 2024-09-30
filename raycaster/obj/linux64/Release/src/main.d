@@ -341,7 +341,8 @@ obj/linux64/Release/src/main.o: src/main.cpp \
  /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxLabel.h \
  /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGui.h \
  /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxSliderGroup.h \
- /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxColorPicker.h
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxColorPicker.h \
+ src/Primitives/Mesh.hpp
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/ofMain.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofConstants.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/tess2/include/tesselator.h:
@@ -689,3 +690,4 @@ src/Primitives/Plane.hpp:
 /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGui.h:
 /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxSliderGroup.h:
 /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxColorPicker.h:
+src/Primitives/Mesh.hpp:

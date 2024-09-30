@@ -341,7 +341,8 @@ obj/linux64/Release/src/ofApp.o: src/ofApp.cpp src/ofApp.h \
  /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxLabel.h \
  /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGui.h \
  /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxSliderGroup.h \
- /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxColorPicker.h
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxColorPicker.h \
+ src/Primitives/Mesh.hpp
 src/ofApp.h:
 src/Primitives/Light.hpp:
 src/Primitives/Sphere.hpp:
@@ -689,3 +690,4 @@ src/Primitives/Plane.hpp:
 /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGui.h:
 /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxSliderGroup.h:
 /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxColorPicker.h:
+src/Primitives/Mesh.hpp:
