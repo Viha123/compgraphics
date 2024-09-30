@@ -1,4 +1,6 @@
 obj/linux64/Release/src/ofApp.o: src/ofApp.cpp src/ofApp.h \
+ src/Primitives/Light.hpp src/Primitives/Sphere.hpp \
+ src/Primitives/SceneObject.hpp \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/ofMain.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofConstants.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/tess2/include/tesselator.h \
@@ -326,10 +328,12 @@ obj/linux64/Release/src/ofApp.o: src/ofApp.cpp src/ofApp.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/../gtx/vector_query.hpp \
  /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/../gtx/vector_query.inl \
  /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/intersect.inl \
- src/RenderCam.hpp src/Primitives/SceneObject.hpp src/Primitives/Ray.hpp \
- src/Primitives/ViewPlane.hpp src/Primitives/Plane.hpp \
- src/Primitives/Sphere.hpp
+ src/Primitives/Ray.hpp src/RenderCam.hpp src/Primitives/ViewPlane.hpp \
+ src/Primitives/Plane.hpp
 src/ofApp.h:
+src/Primitives/Light.hpp:
+src/Primitives/Sphere.hpp:
+src/Primitives/SceneObject.hpp:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/ofMain.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofConstants.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/tess2/include/tesselator.h:
@@ -657,9 +661,7 @@ src/ofApp.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/../gtx/vector_query.hpp:
 /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/../gtx/vector_query.inl:
 /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/intersect.inl:
-src/RenderCam.hpp:
-src/Primitives/SceneObject.hpp:
 src/Primitives/Ray.hpp:
+src/RenderCam.hpp:
 src/Primitives/ViewPlane.hpp:
 src/Primitives/Plane.hpp:
-src/Primitives/Sphere.hpp:

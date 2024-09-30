@@ -320,15 +320,16 @@ obj/linux64/Release/src/main.o: src/main.cpp \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/of3dUtils.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofCamera.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofEasyCam.h \
- src/ofApp.h \
+ src/ofApp.h src/Primitives/Light.hpp src/Primitives/Sphere.hpp \
+ src/Primitives/SceneObject.hpp \
  /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/intersect.hpp \
  /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/../gtx/closest_point.hpp \
  /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/../gtx/closest_point.inl \
  /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/../gtx/vector_query.hpp \
  /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/../gtx/vector_query.inl \
  /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/intersect.inl \
- src/RenderCam.hpp src/Primitives/SceneObject.hpp src/Primitives/Ray.hpp \
- src/Primitives/ViewPlane.hpp src/Primitives/Plane.hpp
+ src/Primitives/Ray.hpp src/RenderCam.hpp src/Primitives/ViewPlane.hpp \
+ src/Primitives/Plane.hpp
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/ofMain.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofConstants.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/tess2/include/tesselator.h:
@@ -651,14 +652,16 @@ obj/linux64/Release/src/main.o: src/main.cpp \
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofCamera.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofEasyCam.h:
 src/ofApp.h:
+src/Primitives/Light.hpp:
+src/Primitives/Sphere.hpp:
+src/Primitives/SceneObject.hpp:
 /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/intersect.hpp:
 /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/../gtx/closest_point.hpp:
 /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/../gtx/closest_point.inl:
 /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/../gtx/vector_query.hpp:
 /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/../gtx/vector_query.inl:
 /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/intersect.inl:
-src/RenderCam.hpp:
-src/Primitives/SceneObject.hpp:
 src/Primitives/Ray.hpp:
+src/RenderCam.hpp:
 src/Primitives/ViewPlane.hpp:
 src/Primitives/Plane.hpp:
