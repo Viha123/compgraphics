@@ -329,7 +329,19 @@ obj/linux64/Release/src/main.o: src/main.cpp \
  /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/../gtx/vector_query.inl \
  /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/intersect.inl \
  src/Primitives/Ray.hpp src/RenderCam.hpp src/Primitives/ViewPlane.hpp \
- src/Primitives/Plane.hpp
+ src/Primitives/Plane.hpp \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxSlider.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxBaseGui.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxInputField.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGuiUtils.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxPanel.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGuiGroup.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxButton.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxToggle.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxLabel.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGui.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxSliderGroup.h \
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxColorPicker.h
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/ofMain.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofConstants.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/tess2/include/tesselator.h:
@@ -665,3 +677,15 @@ src/Primitives/Ray.hpp:
 src/RenderCam.hpp:
 src/Primitives/ViewPlane.hpp:
 src/Primitives/Plane.hpp:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxSlider.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxBaseGui.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxInputField.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGuiUtils.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxPanel.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGuiGroup.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxButton.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxToggle.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxLabel.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGui.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxSliderGroup.h:
+/home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxColorPicker.h:

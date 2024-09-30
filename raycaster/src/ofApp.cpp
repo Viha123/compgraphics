@@ -3,15 +3,19 @@
 #include "Primitives/Sphere.hpp"
 #include "Primitives/ViewPlane.hpp"
 #include "geometric.hpp"
+#include "ofAppRunner.h"
 #include "ofColor.h"
 #include "ofGraphics.h"
 #include "ofGraphicsConstants.h"
 #include "ofPixels.h"
+#include "ofxBaseGui.h"
+#include "ofxInputField.h"
 #include <cmath>
 #include <cstdlib>
 #include <exception>
-#include <limits>
 #include <glm/glm.hpp>
+#include <limits>
+
 // Intersect Ray with Plane  (wrapper on glm::intersect*
 //
 bool Plane::intersect(const Ray &ray, glm::vec3 &point,
@@ -120,17 +124,22 @@ void ofApp::setup() {
   previewCam.setNearClip(.1);
   previewCam.lookAt(glm::vec3(0, 0, 0));
   theCam = &mainCam;
+  gui.setup();
+  gui.setPosition(10, 10); // Set position to top-left corner
+
+  gui.add(diffuseCoeffient.setup("Diffuse Coefficient", 0.5, 0, 1));
+  gui.add(spectacularCoefficient.setup("Spectacular Coefficient", 0.05, 0, 1));
+  gui.add(phongExponent.setup("Phong Exponent", 140, 10, 10000));
   // scene.push_back(new Light(glm::vec3(0,5,0)));
   // lights.push_back(new Light(glm::vec3(3, 3, 0), 100));
 
   lights.push_back(new Light(glm::vec3(1, 5, 1), 50));
-  lights.push_back(new Light(glm::vec3(2, 3, 3),  50));
-  lights.push_back(new Light(glm::vec3(0, 0, 11),  50));
-  
+  lights.push_back(new Light(glm::vec3(-2, 4, 4), 150));
+  // lights.push_back(new Light(glm::vec3(0, 0, 11), 10));
 
   scene.push_back(new Sphere(glm::vec3(3, 0, 1), 1.0, ofColor::blue));
 
-  scene.push_back(new Sphere(glm::vec3(2, 1, 0), 1.0, ofColor::green));
+  scene.push_back(new Sphere(glm::vec3(2, 2, 0), 0.5, ofColor::green));
 
   scene.push_back(new Sphere(glm::vec3(-1, 0, 2), 1.5, ofColor::red));
 
@@ -145,6 +154,7 @@ void ofApp::update() {}
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+
   theCam->begin();
 
   ofSetColor(ofColor::green);
@@ -171,6 +181,7 @@ void ofApp::draw() {
   renderCam.view.draw();
   // ofSetColor(ofColor::blue);
   renderCam.draw();
+
   if (bShowImage) {
 
     glm::vec3 topLeft = renderCam.view.toWorld(0, 0);
@@ -184,6 +195,10 @@ void ofApp::draw() {
                renderCam.view.position.z);
   }
   theCam->end();
+  gui.draw();
+  phongExponent.draw();
+  diffuseCoeffient.draw();
+  spectacularCoefficient.draw();
 }
 
 //--------------------------------------------------------------
@@ -280,8 +295,9 @@ void ofApp::rayTrace() {
         // Implementing this equation: c = cr (ca + cl max (0, n · l)) + cl (h ·
         // n)p .
         count += 1;
-        ofColor color = lambert_phong(nearestIntersectPos, nearestIntersectNorm,
-                              closestShape->diffuseColor, ofColor::white, 50);
+        ofColor color =
+            lambert_phong(nearestIntersectPos, nearestIntersectNorm,
+                          closestShape->diffuseColor, ofColor::white, 50);
 
         image.setColor(j, i, color);
       } else {
@@ -319,33 +335,48 @@ ofColor ofApp::lambert(const glm::vec3 &p, const glm::vec3 &norm,
   return diffusedColor;
 }
 ofColor ofApp::lambert_phong(const glm::vec3 &p, const glm::vec3 &norm,
-                     const ofColor diffuse, const ofColor spectacular,
-                     float power) {
+                             const ofColor diffuse, const ofColor spectacular,
+                             float power) {
   // spectacular is the color of your highlights
   // power is the power exponent between 10 and 10000
   float totalPhong = 0;
   float totalLambert = 0;
-  float ambient = 0.3;
+  float ambient = 0.25;
   for (auto light : lights) {
-    float spectacularCoefficient = 0.1;
-    float diffuseCoeffient = 1;
+    glm::vec3 offset = glm::vec3(0.01,0.01,0.01);
+    Ray shadowRay(p+offset, glm::normalize(light->position - (p+offset)));
+    float distanceToLight = glm::distance(p, light->position);
+    bool inShadow = false;
+    for (auto object : scene) {
+      glm::vec3 intersectPoint;
+      glm::vec3 intersectNormal;
+      if (object->intersect(shadowRay, intersectPoint, intersectNormal)) {
+        float distanceToIntersection = glm::distance(p, intersectPoint);
+        if (distanceToIntersection < distanceToLight) {
+          inShadow = true;
+          break;
+        }
+      }
+    }
+    
+    if (!inShadow) {
 
-    glm::vec3 lightVec = glm::normalize(light->position - p);
-    glm::vec3 normalizedN = glm::normalize(norm);
-    glm::vec3 bisector =
-        (normalizedN + lightVec) / glm::length(lightVec + normalizedN);
-    float r = glm::distance(light->position, p);
-    float spectacularLight =
-        spectacularCoefficient *
-        (light->intensity / glm::pow(r, 2)) *
-        glm::pow(
-            glm::max(0.0f, static_cast<float>(glm::dot(bisector, normalizedN))),
-            power);
-    float diffusedLight =
-        diffuseCoeffient * (light->intensity / glm::pow(r, 2)) *
-        glm::max(0.0f, static_cast<float>(glm::dot(lightVec, normalizedN)));
-    totalPhong += spectacularLight;
-    totalLambert += diffusedLight;
+      glm::vec3 lightVec = glm::normalize(light->position - p);
+      glm::vec3 normalizedN = glm::normalize(norm);
+      glm::vec3 bisector =
+          (normalizedN + lightVec) / glm::length(lightVec + normalizedN);
+      float r = glm::distance(light->position, p);
+      float spectacularLight =
+          spectacularCoefficient * (light->intensity / glm::pow(r, 2)) *
+          glm::pow(glm::max(0.0f, static_cast<float>(
+                                      glm::dot(bisector, normalizedN))),
+                   power);
+      float diffusedLight =
+          diffuseCoeffient * (light->intensity / glm::pow(r, 2)) *
+          glm::max(0.0f, static_cast<float>(glm::dot(lightVec, normalizedN)));
+      totalPhong += spectacularLight;
+      totalLambert += diffusedLight;
+    }
   }
   return (totalPhong * spectacular) + ((totalLambert + ambient) * diffuse);
 }

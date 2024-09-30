@@ -7,8 +7,11 @@
 #include "glm/gtx/intersect.hpp"
 #include "ofColor.h"
 #include "ofMain.h"
-#include "ofxGui.h"
 #include "ofxSlider.h"
+#include "ofxPanel.h"
+#include "ofxButton.h"
+#include "ofxGui.h"
+
 class ofApp : public ofBaseApp {
 
 public:
@@ -34,15 +37,19 @@ public:
   ofColor lambert(const glm::vec3 &p, const glm::vec3 &norm,
                   const ofColor diffuse);
   ofColor lambert_phong(const glm::vec3 &p, const glm::vec3 &norm,
-                const ofColor diffuse, const ofColor spectacular, float power);
-  
-  
+                        const ofColor diffuse, const ofColor spectacular,
+                        float power);
+
   float computeU(int i);
   float computeV(int j);
 
   bool bHide = true;
   bool bShowImage = false;
-
+  // Sliders
+  ofxFloatSlider diffuseCoeffient;
+  ofxFloatSlider spectacularCoefficient;
+  ofxIntSlider phongExponent;
+	ofxPanel gui;
   ofEasyCam mainCam;
   ofCamera topCam;
   ofCamera sideCam;
@@ -54,8 +61,6 @@ public:
   RenderCam renderCam;
   ofImage image;
 
-  // Sliders
-  ofxSlider 
 
   vector<SceneObject *> scene;
   vector<Light *> lights;
