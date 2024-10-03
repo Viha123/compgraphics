@@ -7,6 +7,7 @@
 #include "ofGraphics.h"
 #include <cassert>
 #include <string>
+#include <system_error>
 Mesh::Mesh() {}
 Mesh::Mesh(ofColor color) { diffuseColor = color; };
 void Mesh::setColor(ofColor color)  { diffuseColor = color; };
@@ -37,7 +38,7 @@ void Mesh::computeNormals() {
 bool Mesh::intersect(const Ray &ray, glm::vec3 &point, glm::vec3 &normal) {
   bool intersectsObject = false;
 
-  float smallestT = std::round_toward_infinity;
+  float smallestT = std::numeric_limits<float>::infinity();
   int i = 0;
   for (auto triangle : triangleIndex) {
     glm::vec2 baryPos;
@@ -49,7 +50,7 @@ bool Mesh::intersect(const Ray &ray, glm::vec3 &point, glm::vec3 &normal) {
       if (t < smallestT) {
         smallestT = t;
         point = ray.p + (ray.d) * t;
-        normal = glm::normalize(normalVectors[i][1]);
+        normal = glm::normalize(normalVectors[i][1]*-1);
       }
       intersectsObject = true;
     }
@@ -57,6 +58,9 @@ bool Mesh::intersect(const Ray &ray, glm::vec3 &point, glm::vec3 &normal) {
   }
   
   return intersectsObject;
+}
+void Mesh::setOffset(glm::vec3 offset) {
+  m_offset = offset;
 }
 void Mesh::populateData() {
   assert(m_file.canRead());
@@ -85,7 +89,7 @@ void Mesh::populateData() {
       // if (vertex[0] == 0 || vertex[1] == 0|| vertex[2] == 0) {
       //   std::cout<< line << std::endl;
       // }
-      triangles.emplace_back(glm::vec3(vertex[0], vertex[1], vertex[2]));
+      triangles.emplace_back(glm::vec3(vertex[0] + m_offset[0], vertex[1] + m_offset[1], vertex[2] + m_offset[2]));
     }
     if (line.starts_with("f ")) {
       faces++;

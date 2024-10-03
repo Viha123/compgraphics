@@ -26,6 +26,9 @@ public:
     return (
         glm::intersectRaySphere(ray.p, ray.d, position, 0.3, point, normal));
   }
+  void setIntensity(float newIntensity) {
+    intensity = newIntensity;
+  }
   void print() { std::cout << "Light" << std::endl; }
   float intensity = 10;
   glm::vec3 position = glm::vec3(0, 10, 0); // on top initially

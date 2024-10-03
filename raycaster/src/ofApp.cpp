@@ -15,7 +15,9 @@
 #include <exception>
 #include <glm/glm.hpp>
 #include <limits>
+#include <string>
 #include "Primitives/Mesh.hpp"
+#include "ofxSlider.h"
 
 // Intersect Ray with Plane  (wrapper on glm::intersect*
 //
@@ -131,19 +133,36 @@ void ofApp::setup() {
   gui.add(diffuseCoeffient.setup("Diffuse Coefficient", 0.5, 0, 1));
   gui.add(spectacularCoefficient.setup("Spectacular Coefficient", 0.05, 0, 1));
   gui.add(phongExponent.setup("Phong Exponent", 140, 10, 10000));
-  // scene.push_back(new Light(glm::vec3(0,5,0)));
-  lights.push_back(new Light(glm::vec3(3, 3, 0), 100));
 
-  // lights.push_back(new Light(glm::vec3(1, 5, 1), ~
+  lighting.setup();
+  lighting.setPosition(900, 10);
+
+  
+  
+  lights.push_back(new Light(glm::vec3(-2,2,2), lightStartIntensity));
+  lights.push_back(new Light(glm::vec3(3, 3, 2), lightStartIntensity));
+
+  lights.push_back(new Light(glm::vec3(1, 5, 1), lightStartIntensity));
+  lights.push_back(new Light(glm::vec3(0, 0, 2), lightStartIntensity));
+  
+  for (int i = 0; i < lights.size(); i ++) {
+    ofxIntSlider* lightIntense = new ofxIntSlider();
+    std::string name = "Light " + std::to_string(i);
+    std::cout << name << std::endl;
+    lightIntensity.push_back(lightIntense->setup(name, lightStartIntensity, 0, 500));
+    lighting.add(lightIntense);
+  }
+
 
   ofFile file = ofFile();
   file.open("knight_lowpoly.obj", ofFile::ReadOnly);
+  mesh.setOffset(glm::vec3(0,-3.5,0)); //place the mesh in a good spot
+  mesh.setColor(ofColor::red);
   mesh.loadFile(file);
-  mesh.setColor(ofColor::black);
 
   // scene.push_back(new Sphere(glm::vec3(3, 0, 1), 1.0, ofColor::blue));
 
-  // scene.push_back(new Sphere(glm::vec3(2, 2, 0), 0.5, ofColor::green));
+  // scene.push_back(new Sphere(glm::vec3(-2, 3, 0), 0.5, ofColor::green));
 
   // scene.push_back(new Sphere(glm::vec3(-1, 0, 2), 1.5, ofColor::red));
 
@@ -179,10 +198,11 @@ void ofApp::draw() {
   for (size_t i = 0; i < lights.size(); i++) {
     ofSetColor(ofColor::white);
     lights[i]->draw();
+    lights[i]->setIntensity(*lightIntensity[i]);
   }
 
   ofDisableLighting();
-  ofSetColor(ofColor::lightSkyBlue);
+  // ofSetColor(ofColor::lightSkyBlue);
   renderCam.drawFrustum();
   renderCam.view.draw();
   // ofSetColor(ofColor::blue);
@@ -205,7 +225,9 @@ void ofApp::draw() {
   }
   theCam->end();
   ofDisableDepthTest();
+
   gui.draw();
+  lighting.draw();
   ofEnableDepthTest();
 
 }
@@ -306,7 +328,7 @@ void ofApp::rayTrace() {
         count += 1;
         ofColor color =
             lambert_phong(nearestIntersectPos, nearestIntersectNorm,
-                          closestShape->diffuseColor, ofColor::white, phongExponent);
+                          closestShape->diffuseColor, ofColor::lightYellow, phongExponent);
 
         image.setColor(j, i, color);
       } else {

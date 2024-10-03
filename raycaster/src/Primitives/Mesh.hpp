@@ -27,7 +27,9 @@ public:
   std::vector<std::array<glm::vec3, 2>> normalVectors;
   glm::vec3 computeCrossProduct(glm::vec3 a, glm::vec3 b);
   ofColor diffuseColor;
+  void setOffset(glm::vec3 offset);
 private:
   void populateData();
   ofFile m_file;
+  glm::vec3 m_offset = glm::vec3(0,0,0);
 };

@@ -7,6 +7,7 @@
 #include "glm/gtx/intersect.hpp"
 #include "ofColor.h"
 #include "ofMain.h"
+#include "ofxInputField.h"
 #include "ofxSlider.h"
 #include "ofxPanel.h"
 #include "ofxButton.h"
@@ -50,7 +51,12 @@ public:
   ofxFloatSlider diffuseCoeffient;
   ofxFloatSlider spectacularCoefficient;
   ofxIntSlider phongExponent;
-	ofxPanel gui;
+  ofxPanel gui;
+
+  ofxPanel lighting;
+  std::vector<ofxIntSlider*> lightIntensity;
+  int lightStartIntensity = 50;
+  
   ofEasyCam mainCam;
   ofCamera topCam;
   ofCamera sideCam;
