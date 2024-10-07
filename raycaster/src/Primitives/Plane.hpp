@@ -17,6 +17,7 @@ public:
 	}
 	Plane() { }
 	glm::vec3 normal = glm::vec3(0, 1, 0);
+	
 	bool intersect(const Ray& ray, glm::vec3& point, glm::vec3& normal);
 	void draw() {
 		plane.setPosition(position);
@@ -26,7 +27,7 @@ public:
 		plane.drawWireframe();
         }
   void print() { std::cout << "Plane" << std::endl; }
-        
+  void setColor(ofColor newColor) {diffuseColor = newColor;}
 	ofPlanePrimitive plane;
 	float width = 20;
 	float height = 20;

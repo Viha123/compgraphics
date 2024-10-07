@@ -9,6 +9,7 @@ public:
   Light(glm::vec3 p, float i) {
     position = p;
     intensity = i;
+    
     sphere = new Sphere(p, 0.3, ofColor::white);
   }
   Light() {};
@@ -32,5 +33,7 @@ public:
   void print() { std::cout << "Light" << std::endl; }
   float intensity = 10;
   glm::vec3 position = glm::vec3(0, 10, 0); // on top initially
+  
   Sphere *sphere = new Sphere(position, 0.3, ofColor::white);
+  
 };

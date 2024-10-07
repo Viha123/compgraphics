@@ -1,5 +1,6 @@
 #include "ofApp.h"
 #include "Primitives/Light.hpp"
+#include "Primitives/Mesh.hpp"
 #include "Primitives/Sphere.hpp"
 #include "Primitives/ViewPlane.hpp"
 #include "geometric.hpp"
@@ -10,14 +11,13 @@
 #include "ofPixels.h"
 #include "ofxBaseGui.h"
 #include "ofxInputField.h"
+#include "ofxSlider.h"
 #include <cmath>
 #include <cstdlib>
 #include <exception>
 #include <glm/glm.hpp>
 #include <limits>
 #include <string>
-#include "Primitives/Mesh.hpp"
-#include "ofxSlider.h"
 
 // Intersect Ray with Plane  (wrapper on glm::intersect*
 //
@@ -137,41 +137,40 @@ void ofApp::setup() {
   lighting.setup();
   lighting.setPosition(900, 10);
 
-  
-  
-  lights.push_back(new Light(glm::vec3(-2,2,2), lightStartIntensity));
-  lights.push_back(new Light(glm::vec3(3, 3, 2), lightStartIntensity));
+  lights.push_back(new Light(glm::vec3(-2, 2, 2), lightStartIntensity));
+  lights.push_back(new Light(glm::vec3(3, 1, 2), lightStartIntensity));
 
-  lights.push_back(new Light(glm::vec3(1, 5, 1), lightStartIntensity));
+  lights.push_back(new Light(glm::vec3(1, 4, 1), lightStartIntensity));
   lights.push_back(new Light(glm::vec3(0, 0, 2), lightStartIntensity));
-  
-  for (int i = 0; i < lights.size(); i ++) {
-    ofxIntSlider* lightIntense = new ofxIntSlider();
+
+  for (int i = 0; i < lights.size(); i++) {
+    ofxIntSlider *lightIntense = new ofxIntSlider();
     std::string name = "Light " + std::to_string(i);
     std::cout << name << std::endl;
-    lightIntensity.push_back(lightIntense->setup(name, lightStartIntensity, 0, 500));
+    // lights[i]->diffuseColor = ofColor::yellow;
+    lightIntensity.push_back(
+        lightIntense->setup(name, lightStartIntensity, 0, 500));
     lighting.add(lightIntense);
   }
 
-
   ofFile file = ofFile();
   file.open("knight_lowpoly.obj", ofFile::ReadOnly);
-  mesh.setOffset(glm::vec3(0,-3.5,0)); //place the mesh in a good spot
-  mesh.setColor(ofColor::red);
+  mesh.setOffset(glm::vec3(0, -3.5, 0)); // place the mesh in a good spot
+  mesh.setColor(ofColor::white);
   mesh.loadFile(file);
 
-  // scene.push_back(new Sphere(glm::vec3(3, 0, 1), 1.0, ofColor::blue));
+  scene.push_back(new Sphere(glm::vec3(3, 0, 1), 1.0, ofColor::blue));
 
-  // scene.push_back(new Sphere(glm::vec3(-2, 3, 0), 0.5, ofColor::green));
+  scene.push_back(new Sphere(glm::vec3(-2, 3, 0), 0.5, ofColor::green));
 
-  // scene.push_back(new Sphere(glm::vec3(-1, 0, 2), 1.5, ofColor::red));
+  scene.push_back(new Sphere(glm::vec3(-1, 0, 2), 1.5, ofColor::red));
 
-  scene.push_back(&mesh);
+  // scene.push_back(&mesh);
 
   // // ground plane
   // //
   scene.push_back(
-      new Plane(glm::vec3(0, -2, 0), glm::vec3(0, 1, 0), ofColor::lightGray));
+      new Plane(glm::vec3(0, -2, 0), glm::vec3(0, 1, 0), ofColor::blue));
 }
 
 //--------------------------------------------------------------
@@ -229,7 +228,6 @@ void ofApp::draw() {
   gui.draw();
   lighting.draw();
   ofEnableDepthTest();
-
 }
 
 //--------------------------------------------------------------
@@ -326,9 +324,9 @@ void ofApp::rayTrace() {
         // Implementing this equation: c = cr (ca + cl max (0, n · l)) + cl (h ·
         // n)p .
         count += 1;
-        ofColor color =
-            lambert_phong(nearestIntersectPos, nearestIntersectNorm,
-                          closestShape->diffuseColor, ofColor::lightYellow, phongExponent);
+        ofColor color = lambert_phong(nearestIntersectPos, nearestIntersectNorm,
+                                      closestShape->diffuseColor,
+                                      ofColor::lightYellow, phongExponent);
 
         image.setColor(j, i, color);
       } else {
@@ -374,8 +372,8 @@ ofColor ofApp::lambert_phong(const glm::vec3 &p, const glm::vec3 &norm,
   float totalLambert = 0;
   float ambient = 0.25;
   for (auto light : lights) {
-    glm::vec3 offset = glm::vec3(0.01,0.01,0.01);
-    Ray shadowRay(p+offset, glm::normalize(light->position - (p+offset)));
+    glm::vec3 offset = glm::vec3(0.01, 0.01, 0.01);
+    Ray shadowRay(p + offset, glm::normalize(light->position - (p + offset)));
     float distanceToLight = glm::distance(p, light->position);
     bool inShadow = false;
     for (auto object : scene) {
@@ -389,7 +387,7 @@ ofColor ofApp::lambert_phong(const glm::vec3 &p, const glm::vec3 &norm,
         }
       }
     }
-    
+
     if (!inShadow) {
 
       glm::vec3 lightVec = glm::normalize(light->position - p);
@@ -415,10 +413,32 @@ ofColor ofApp::lambert_phong(const glm::vec3 &p, const glm::vec3 &norm,
 void ofApp::mouseMoved(int x, int y) {}
 
 //--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button) {}
+void ofApp::mouseDragged(int x, int y, int button) {
+  // drag objects in scence
+  // drag objects in 3D
+  // drag in the plane of the camera
+}
 
 //--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button) {}
+void ofApp::mousePressed(int x, int y, int button) {
+  glm::vec3 worldPoint = theCam->screenToWorld(glm::vec3(x, y, 0));
+  for (auto element : scene) {
+    Ray ray(worldPoint, glm::normalize(worldPoint - theCam->getPosition()));
+    glm::vec3 p, n;
+    if (element->intersect(ray, p, n)) {
+      element->setColor(ofColor::green);
+      std::cout << "INTERSEcTS point: " << p << std::endl;
+    } else {
+      std::cout << "No intersection" << std::endl;
+    }
+    // plane. pos = sphere.pos
+    // plane.normal = cam.getZAxis();
+    // if plane.intersect(wp, d, p)
+    // cout intersects point
+    // else
+    // cout << "no intersection" << endl;
+  }
+}
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button) {}

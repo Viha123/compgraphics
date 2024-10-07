@@ -118,6 +118,7 @@ void Mesh::populateData() {
 }
 
 void Mesh::draw() {
+  ofSetColor(diffuseColor);
   for (auto triangle : triangleIndex) {
     ofDrawTriangle(triangles[triangle[0]], triangles[triangle[1]],
                    triangles[triangle[2]]);
