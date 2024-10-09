@@ -1,18 +1,20 @@
 #pragma once
 
 #include "Primitives/Light.hpp"
+#include "Primitives/Mesh.hpp"
 #include "Primitives/SceneObject.hpp"
 #include "RenderCam.hpp"
 #include "fwd.hpp"
 #include "glm/gtx/intersect.hpp"
+#include "ofCamera.h"
 #include "ofColor.h"
+#include "ofEasyCam.h"
 #include "ofMain.h"
-#include "ofxInputField.h"
-#include "ofxSlider.h"
-#include "ofxPanel.h"
 #include "ofxButton.h"
 #include "ofxGui.h"
-#include "Primitives/Mesh.hpp"
+#include "ofxInputField.h"
+#include "ofxPanel.h"
+#include "ofxSlider.h"
 
 class ofApp : public ofBaseApp {
 
@@ -54,15 +56,15 @@ public:
   ofxPanel gui;
 
   ofxPanel lighting;
-  std::vector<ofxIntSlider*> lightIntensity;
+  std::vector<ofxIntSlider *> lightIntensity;
   int lightStartIntensity = 50;
-  
+
   ofEasyCam mainCam;
   ofCamera topCam;
   ofCamera sideCam;
   ofCamera previewCam;
   ofCamera *theCam; // set to current camera either mainCam or sideCam
-
+  ofEasyCam currentView;
   // set up one render camera to render image throughn
   //
   RenderCam renderCam;
@@ -71,6 +73,9 @@ public:
   Mesh mesh;
   vector<SceneObject *> scene;
   vector<Light *> lights;
+  bool draggingOn = false;
+  Plane normalPlane;
+  SceneObject *highlightedShape = nullptr;
   int imageWidth = 600;
   int imageHeight = 400;
 };

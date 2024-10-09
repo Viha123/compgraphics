@@ -1,10 +1,13 @@
 #include "ofApp.h"
 #include "Primitives/Light.hpp"
 #include "Primitives/Mesh.hpp"
+#include "Primitives/SceneObject.hpp"
 #include "Primitives/Sphere.hpp"
 #include "Primitives/ViewPlane.hpp"
+#include "fwd.hpp"
 #include "geometric.hpp"
 #include "ofAppRunner.h"
+#include "ofCamera.h"
 #include "ofColor.h"
 #include "ofGraphics.h"
 #include "ofGraphicsConstants.h"
@@ -13,6 +16,7 @@
 #include "ofxInputField.h"
 #include "ofxSlider.h"
 #include <cmath>
+#include <cstddef>
 #include <cstdlib>
 #include <exception>
 #include <glm/glm.hpp>
@@ -161,7 +165,7 @@ void ofApp::setup() {
 
   scene.push_back(new Sphere(glm::vec3(3, 0, 1), 1.0, ofColor::blue));
 
-  scene.push_back(new Sphere(glm::vec3(-2, 3, 0), 0.5, ofColor::green));
+  scene.push_back(new Sphere(glm::vec3(-2, 3, 0), 0.5, ofColor::violet));
 
   scene.push_back(new Sphere(glm::vec3(-1, 0, 2), 1.5, ofColor::red));
 
@@ -189,7 +193,11 @@ void ofApp::draw() {
   //  draw objects in scene
   //
   for (size_t i = 0; i < scene.size(); i++) {
-    ofSetColor(scene[i]->diffuseColor);
+    if (scene[i]->isSelected) {
+      ofSetColor(255, 100, 0);
+    } else {
+      ofSetColor(scene[i]->diffuseColor);
+    }
     scene[i]->draw();
   }
 
@@ -223,6 +231,7 @@ void ofApp::draw() {
     mesh.drawNormals(1);
   }
   theCam->end();
+
   ofDisableDepthTest();
 
   gui.draw();
@@ -417,31 +426,68 @@ void ofApp::mouseDragged(int x, int y, int button) {
   // drag objects in scence
   // drag objects in 3D
   // drag in the plane of the camera
+  std::cout << "MOUSE dragged" << std::endl;
+  if (highlightedShape != nullptr and highlightedShape->isSelected == true) {
+    // disable camera and do dragging.
+    draggingOn = true;
+
+    mainCam.disableMouseInput();
+    glm::vec3 worldPoint = theCam->screenToWorld(glm::vec3(x, y, 0));
+
+    normalPlane.position = highlightedShape->position;
+    normalPlane.normal = theCam->getZAxis();
+    // std::cout << theCam->getPosition() << " " << worldPoint << std::endl;
+    Ray ray(worldPoint, glm::normalize(worldPoint - theCam->getPosition()));
+    glm::vec3 intersectionPoint;
+    [[maybe_unused]] glm::vec3 normalVec; // unused
+    if (normalPlane.intersect(ray, intersectionPoint, normalVec)) {
+      // offset the closestShapesPosition by intersectionPoint -
+      // closestShape.position
+      highlightedShape->position += (intersectionPoint - highlightedShape->position);
+      std::cout << "HERE" << std::endl;
+    }
+  }
+  if (highlightedShape == nullptr or highlightedShape->isSelected == false) {
+    mainCam.enableMouseInput();
+  }
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button) {
+  std::cout << "MOUSE PRESSED" << std::endl;
   glm::vec3 worldPoint = theCam->screenToWorld(glm::vec3(x, y, 0));
+  float closestDistance = std::numeric_limits<float>::max();
+  highlightedShape = nullptr;
   for (auto element : scene) {
     Ray ray(worldPoint, glm::normalize(worldPoint - theCam->getPosition()));
     glm::vec3 p, n;
     if (element->intersect(ray, p, n)) {
-      element->setColor(ofColor::green);
-      std::cout << "INTERSEcTS point: " << p << std::endl;
-    } else {
-      std::cout << "No intersection" << std::endl;
+      float distance = glm::distance(p, worldPoint);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        highlightedShape = element;
+        std::cout << "INTERSEcTS closest point: " << p << std::endl;
+      }
     }
-    // plane. pos = sphere.pos
-    // plane.normal = cam.getZAxis();
-    // if plane.intersect(wp, d, p)
-    // cout intersects point
+    element->isSelected = false; // regardless just make it
+  }
+  if (highlightedShape != nullptr) {
+    highlightedShape->isSelected = true;
+
+    // cout intersects pointd
     // else
     // cout << "no intersection" << endl;
   }
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button) {}
+void ofApp::mouseReleased(int x, int y, int button) {
+  draggingOn = false;
+  theCam = &mainCam;
+  if (highlightedShape != nullptr) {
+    highlightedShape->isSelected = false;
+  }
+}
 
 //--------------------------------------------------------------
 void ofApp::mouseEntered(int x, int y) {}

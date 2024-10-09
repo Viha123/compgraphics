@@ -33,6 +33,7 @@ public:
   void print() { std::cout << "Light" << std::endl; }
   float intensity = 10;
   glm::vec3 position = glm::vec3(0, 10, 0); // on top initially
+  void setColor(ofColor newColor) {diffuseColor = newColor;}
   
   Sphere *sphere = new Sphere(position, 0.3, ofColor::white);
   

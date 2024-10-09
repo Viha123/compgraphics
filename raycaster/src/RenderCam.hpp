@@ -21,7 +21,8 @@ public:
           std::cout << "rendercam" << std::endl;
 				}
 	void drawFrustum();
-
+  void setColor(ofColor newColor) {diffuseColor = newColor;}
+	
 	glm::vec3 aim;
 	ViewPlane view;          // The camera viewplane, this is the view that we will render 
 };

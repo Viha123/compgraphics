@@ -2,6 +2,7 @@
 
 #include "SceneObject.hpp"
 #include "glm/gtx/intersect.hpp"
+#include "ofColor.h"
 #include "ofMain.h"
 //  General purpose sphere  (assume parametric)
 //
@@ -19,6 +20,6 @@ public:
   }
   void draw() { ofDrawSphere(position, radius); }
   void print() { std::cout << "\033[1;31m" << "Sphere " << diffuseColor;}
-
+  void setColor(ofColor color) {diffuseColor = color;}
   float radius = 1.0;
 };
