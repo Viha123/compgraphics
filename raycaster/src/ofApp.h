@@ -6,6 +6,7 @@
 #include "RenderCam.hpp"
 #include "fwd.hpp"
 #include "glm/gtx/intersect.hpp"
+#include "of3dPrimitives.h"
 #include "ofCamera.h"
 #include "ofColor.h"
 #include "ofEasyCam.h"
@@ -64,18 +65,20 @@ public:
   ofCamera sideCam;
   ofCamera previewCam;
   ofCamera *theCam; // set to current camera either mainCam or sideCam
-  ofEasyCam currentView;
   // set up one render camera to render image throughn
   //
   RenderCam renderCam;
   ofImage image;
-
+  glm::vec3 shapeIntersectionPoint;
+  glm::vec3 offsetIntersectionPoint;
   Mesh mesh;
   vector<SceneObject *> scene;
   vector<Light *> lights;
   bool draggingOn = false;
   Plane normalPlane;
   SceneObject *highlightedShape = nullptr;
+  glm::vec3 prevVector;
+  // glm::vec3 offsetIntersectionPoint;
   int imageWidth = 600;
   int imageHeight = 400;
 };

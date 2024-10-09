@@ -230,6 +230,7 @@ void ofApp::draw() {
   if (!bHide) {
     mesh.drawNormals(1);
   }
+  // std::cout << normalPlane.normal << std::endl;
   theCam->end();
 
   ofDisableDepthTest();
@@ -426,7 +427,6 @@ void ofApp::mouseDragged(int x, int y, int button) {
   // drag objects in scence
   // drag objects in 3D
   // drag in the plane of the camera
-  std::cout << "MOUSE dragged" << std::endl;
   if (highlightedShape != nullptr and highlightedShape->isSelected == true) {
     // disable camera and do dragging.
     draggingOn = true;
@@ -434,17 +434,26 @@ void ofApp::mouseDragged(int x, int y, int button) {
     mainCam.disableMouseInput();
     glm::vec3 worldPoint = theCam->screenToWorld(glm::vec3(x, y, 0));
 
-    normalPlane.position = highlightedShape->position;
+    normalPlane.position = shapeIntersectionPoint;
     normalPlane.normal = theCam->getZAxis();
-    // std::cout << theCam->getPosition() << " " << worldPoint << std::endl;
-    Ray ray(worldPoint, glm::normalize(worldPoint - theCam->getPosition()));
+
+    
+    std::cout << normalPlane.normal << std::endl;
+    // std::cout << normal << std::endl;
+    Ray ray(theCam->getPosition(), glm::normalize(worldPoint - theCam->getPosition()));
     glm::vec3 intersectionPoint;
     [[maybe_unused]] glm::vec3 normalVec; // unused
     if (normalPlane.intersect(ray, intersectionPoint, normalVec)) {
       // offset the closestShapesPosition by intersectionPoint -
       // closestShape.position
-      highlightedShape->position += (intersectionPoint - highlightedShape->position);
-      std::cout << "HERE" << std::endl;
+
+      // std::cout << highlightedShape->position << std::endl;;
+      // glm::vec3 currentVector = intersectionPoint - theCam->getPosition();
+      highlightedShape->position  = intersectionPoint - offsetIntersectionPoint;
+      
+      // offsetIntersectionPoint = highlightedShape->position - intersect ionPoint;
+      // std::cout << highlightedShape->position << std::endl;;
+      
     }
   }
   if (highlightedShape == nullptr or highlightedShape->isSelected == false) {
@@ -454,10 +463,10 @@ void ofApp::mouseDragged(int x, int y, int button) {
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button) {
-  std::cout << "MOUSE PRESSED" << std::endl;
   glm::vec3 worldPoint = theCam->screenToWorld(glm::vec3(x, y, 0));
   float closestDistance = std::numeric_limits<float>::max();
   highlightedShape = nullptr;
+  
   for (auto element : scene) {
     Ray ray(worldPoint, glm::normalize(worldPoint - theCam->getPosition()));
     glm::vec3 p, n;
@@ -466,14 +475,15 @@ void ofApp::mousePressed(int x, int y, int button) {
       if (distance < closestDistance) {
         closestDistance = distance;
         highlightedShape = element;
-        std::cout << "INTERSEcTS closest point: " << p << std::endl;
+        offsetIntersectionPoint = p - element->position;
+        shapeIntersectionPoint = p;
       }
     }
     element->isSelected = false; // regardless just make it
   }
   if (highlightedShape != nullptr) {
     highlightedShape->isSelected = true;
-
+    
     // cout intersects pointd
     // else
     // cout << "no intersection" << endl;
@@ -486,6 +496,7 @@ void ofApp::mouseReleased(int x, int y, int button) {
   theCam = &mainCam;
   if (highlightedShape != nullptr) {
     highlightedShape->isSelected = false;
+    // offsetIntersectionPoint = glm::vec3(0,0,0);
   }
 }
 
