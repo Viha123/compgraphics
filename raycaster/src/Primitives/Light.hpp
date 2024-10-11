@@ -1,40 +1,27 @@
 #pragma once
 
-#include "Primitives/Sphere.hpp"
 #include "SceneObject.hpp"
-#include "of3dGraphics.h"
+#include "glm/gtx/intersect.hpp"
 #include "ofColor.h"
+#include "ofMain.h"
+//  General purpose sphere  (assume parametric)
+//
 class Light : public SceneObject {
 public:
-  Light(glm::vec3 p, float i) {
+  Light(glm::vec3 p, ofColor diffuse = ofColor::white, int i = 5) {
     position = p;
+    diffuseColor = diffuse;
     intensity = i;
-    
-    sphere = new Sphere(p, 0.3, ofColor::white);
   }
-  Light() {};
-  Light(float i) {
-    intensity = i;
-    sphere = new Sphere(position, 0.3, ofColor::white);
-  }
-  Light(glm::vec3 p) {
-    position = p;
-    sphere = new Sphere(p, 0.3, ofColor::white);
-  }
-
-  void draw() { sphere->draw(); }
+  Light() {}
   bool intersect(const Ray &ray, glm::vec3 &point, glm::vec3 &normal) {
     return (
-        glm::intersectRaySphere(ray.p, ray.d, position, 0.3, point, normal));
+        glm::intersectRaySphere(ray.p, ray.d, position, radius, point, normal));
   }
-  void setIntensity(float newIntensity) {
-    intensity = newIntensity;
-  }
-  void print() { std::cout << "Light" << std::endl; }
-  float intensity = 10;
-  glm::vec3 position = glm::vec3(0, 10, 0); // on top initially
-  void setColor(ofColor newColor) {diffuseColor = newColor;}
-  
-  Sphere *sphere = new Sphere(position, 0.3, ofColor::white);
-  
+  void draw() { ofDrawSphere(position, radius); }
+  void print() { std::cout << "Light " << diffuseColor << std::endl;}
+  void setColor(ofColor color) {diffuseColor = color;}
+  float radius = 0.3;
+  int intensity = 5;
+  void setIntensity(int newIntensity) {intensity = newIntensity;}
 };

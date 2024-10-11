@@ -39,4 +39,7 @@ public:
   ofPlanePrimitive plane;
   float width = 20;
   float height = 20;
+  void toggleDraggable() {
+    isDraggable = !isDraggable;
+  }
 };

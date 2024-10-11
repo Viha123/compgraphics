@@ -20,13 +20,14 @@ public:
   void setColor(ofColor color);
   std::vector<glm::vec3> triangles; // The vertices would be stored in here
   // std::vector<std::array<glm::vec3,3>> triangles;
-
+  std::vector<glm::vec3> originalTriangles;
   std::vector<std::array<int, 3>>
       triangleIndex; // The index of the triangles that make up a
                      // mesh are located here
   std::vector<std::array<glm::vec3, 2>> normalVectors;
   glm::vec3 computeCrossProduct(glm::vec3 a, glm::vec3 b);
-  ofColor diffuseColor;
+  // ofColor diffuseColor;
+  ofColor selectedColor = ofColor(255, 100, 0);
   void setOffset(glm::vec3 offset);
 private:
   void populateData();

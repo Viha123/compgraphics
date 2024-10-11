@@ -20,5 +20,7 @@ public:
 	//
 	ofColor diffuseColor = ofColor::grey;    // default colors - can be changed.
 	bool isSelected = false;
-	ofColor specularColor = ofColor::lightGray;
+  ofColor specularColor = ofColor::lightGray;
+  bool isDraggable = true ;
+        
 };

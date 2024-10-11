@@ -320,8 +320,7 @@ obj/linux64/Release/src/main.o: src/main.cpp \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/of3dUtils.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofCamera.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofEasyCam.h \
- src/ofApp.h src/Primitives/Light.hpp src/Primitives/Sphere.hpp \
- src/Primitives/SceneObject.hpp \
+ src/ofApp.h src/Primitives/Light.hpp src/Primitives/SceneObject.hpp \
  /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/intersect.hpp \
  /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/../gtx/closest_point.hpp \
  /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/../gtx/closest_point.inl \
@@ -665,7 +664,6 @@ obj/linux64/Release/src/main.o: src/main.cpp \
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/3d/ofEasyCam.h:
 src/ofApp.h:
 src/Primitives/Light.hpp:
-src/Primitives/Sphere.hpp:
 src/Primitives/SceneObject.hpp:
 /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/intersect.hpp:
 /home/vihashah/dev/graphics/openFrameworks/libs/glm/include/glm/gtx/../gtx/closest_point.hpp:

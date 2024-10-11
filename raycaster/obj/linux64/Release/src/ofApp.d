@@ -1,6 +1,5 @@
 obj/linux64/Release/src/ofApp.o: src/ofApp.cpp src/ofApp.h \
- src/Primitives/Light.hpp src/Primitives/Sphere.hpp \
- src/Primitives/SceneObject.hpp \
+ src/Primitives/Light.hpp src/Primitives/SceneObject.hpp \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/ofMain.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofConstants.h \
  /home/vihashah/dev/graphics/openFrameworks/libs/tess2/include/tesselator.h \
@@ -341,10 +340,10 @@ obj/linux64/Release/src/ofApp.o: src/ofApp.cpp src/ofApp.h \
  /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxGuiGroup.h \
  /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxLabel.h \
  /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxColorPicker.h \
- /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxPanel.h
+ /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxPanel.h \
+ src/Primitives/Sphere.hpp
 src/ofApp.h:
 src/Primitives/Light.hpp:
-src/Primitives/Sphere.hpp:
 src/Primitives/SceneObject.hpp:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/ofMain.h:
 /home/vihashah/dev/graphics/openFrameworks/libs/openFrameworks/utils/ofConstants.h:
@@ -690,3 +689,4 @@ src/Primitives/Plane.hpp:
 /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxLabel.h:
 /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxColorPicker.h:
 /home/vihashah/dev/graphics/openFrameworks/addons/ofxGui/src/ofxPanel.h:
+src/Primitives/Sphere.hpp:

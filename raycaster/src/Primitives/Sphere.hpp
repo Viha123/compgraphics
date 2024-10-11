@@ -19,7 +19,7 @@ public:
         glm::intersectRaySphere(ray.p, ray.d, position, radius, point, normal));
   }
   void draw() { ofDrawSphere(position, radius); }
-  void print() { std::cout << "\033[1;31m" << "Sphere " << diffuseColor;}
+  void print() { std::cout << "Sphere " << diffuseColor << std::endl;}
   void setColor(ofColor color) {diffuseColor = color;}
   float radius = 1.0;
 };

@@ -10,7 +10,7 @@
 #include <system_error>
 Mesh::Mesh() {}
 Mesh::Mesh(ofColor color) { diffuseColor = color; };
-void Mesh::setColor(ofColor color)  { diffuseColor = color; };
+void Mesh::setColor(ofColor color) { diffuseColor = color; };
 void Mesh::loadFile(ofFile file) {
   m_file = file;
   populateData();
@@ -20,7 +20,7 @@ void Mesh::loadFile(ofFile file) {
 void Mesh::computeNormals() {
   float beta = 0.33;
   float gamma = 0.33;
-
+  
   for (auto triangle : triangleIndex) {
     // std::cout << triangle[0] << " " << triangle[1] << " " << triangle[2] <<
     // std::endl;
@@ -38,7 +38,7 @@ void Mesh::computeNormals() {
 bool Mesh::intersect(const Ray &ray, glm::vec3 &point, glm::vec3 &normal) {
   bool intersectsObject = false;
 
-  float smallestT = std::numeric_limits<float>::infinity();
+  float smallestT = std::numeric_limits<float>::max();
   int i = 0;
   for (auto triangle : triangleIndex) {
     glm::vec2 baryPos;
@@ -50,17 +50,24 @@ bool Mesh::intersect(const Ray &ray, glm::vec3 &point, glm::vec3 &normal) {
       if (t < smallestT) {
         smallestT = t;
         point = ray.p + (ray.d) * t;
-        normal = glm::normalize(normalVectors[i][1]*-1);
+        normal = glm::normalize(normalVectors[i][1]) *-1 ;
       }
       intersectsObject = true;
     }
-    i ++;
+    i++;
   }
-  
+
   return intersectsObject;
 }
 void Mesh::setOffset(glm::vec3 offset) {
   m_offset = offset;
+  // for (auto& vertex : originalTriangles) {
+  //   vertex +;
+  // }
+  for (size_t i = 0; i < originalTriangles.size(); i++) {
+    triangles[i] = originalTriangles[i] + m_offset;
+  }
+  // computeNormals();
 }
 void Mesh::populateData() {
   assert(m_file.canRead());
@@ -89,7 +96,9 @@ void Mesh::populateData() {
       // if (vertex[0] == 0 || vertex[1] == 0|| vertex[2] == 0) {
       //   std::cout<< line << std::endl;
       // }
-      triangles.emplace_back(glm::vec3(vertex[0] + m_offset[0], vertex[1] + m_offset[1], vertex[2] + m_offset[2]));
+      triangles.emplace_back(glm::vec3(vertex[0], vertex[1], vertex[2]));
+      originalTriangles.emplace_back(glm::vec3(vertex[0], vertex[1], vertex[2]));
+
     }
     if (line.starts_with("f ")) {
       faces++;
@@ -118,9 +127,15 @@ void Mesh::populateData() {
 }
 
 void Mesh::draw() {
-  ofSetColor(diffuseColor);
+  if (isSelected) {
+    ofSetColor(selectedColor);
+  } else {
+    ofSetColor(diffuseColor);
+  }
+  // std::cout << diffuseColor << std::endl;
   for (auto triangle : triangleIndex) {
-    ofDrawTriangle(triangles[triangle[0]], triangles[triangle[1]],
+    ofDrawTriangle(triangles[triangle[0]] ,
+                   triangles[triangle[1]],
                    triangles[triangle[2]]);
   }
 }

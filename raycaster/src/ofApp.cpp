@@ -141,17 +141,18 @@ void ofApp::setup() {
   lighting.setup();
   lighting.setPosition(900, 10);
 
-  lights.push_back(new Light(glm::vec3(-2, 2, 2), lightStartIntensity));
-  lights.push_back(new Light(glm::vec3(3, 1, 2), lightStartIntensity));
+  lights.push_back(new Light(glm::vec3(-4, 2, 2), ofColor::white, lightStartIntensity));
 
-  lights.push_back(new Light(glm::vec3(1, 4, 1), lightStartIntensity));
-  lights.push_back(new Light(glm::vec3(0, 0, 2), lightStartIntensity));
+  lights.push_back(new Light(glm::vec3(5, 2, 3), ofColor::white,lightStartIntensity));
+
+  lights.push_back(new Light(glm::vec3(2, 5, 3), ofColor::white,lightStartIntensity));
+  lights.push_back(new Light(glm::vec3(3, 0, 1), ofColor::white, lightStartIntensity));
 
   for (int i = 0; i < lights.size(); i++) {
     ofxIntSlider *lightIntense = new ofxIntSlider();
     std::string name = "Light " + std::to_string(i);
     std::cout << name << std::endl;
-    // lights[i]->diffuseColor = ofColor::yellow;
+    lights[i]->diffuseColor = ofColor::yellow;
     lightIntensity.push_back(
         lightIntense->setup(name, lightStartIntensity, 0, 500));
     lighting.add(lightIntense);
@@ -159,9 +160,10 @@ void ofApp::setup() {
 
   ofFile file = ofFile();
   file.open("knight_lowpoly.obj", ofFile::ReadOnly);
-  mesh.setOffset(glm::vec3(0, -3.5, 0)); // place the mesh in a good spot
-  mesh.setColor(ofColor::white);
+
+  mesh.setColor(ofColor::lightSeaGreen);
   mesh.loadFile(file);
+  // mesh.setOffset(glm::vec3(0, -3.5, 0)); // place the mesh in a good spot
 
   scene.push_back(new Sphere(glm::vec3(3, 0, 1), 1.0, ofColor::blue));
 
@@ -169,12 +171,14 @@ void ofApp::setup() {
 
   scene.push_back(new Sphere(glm::vec3(-1, 0, 2), 1.5, ofColor::red));
 
-  // scene.push_back(&mesh);
+  scene.push_back(&mesh);
 
   // // ground plane
   // //
-  scene.push_back(
-      new Plane(glm::vec3(0, -2, 0), glm::vec3(0, 1, 0), ofColor::blue));
+  ground = new Plane(glm::vec3(0, -2, 0), glm::vec3(0, 1, 0),
+                     ofColor::lightGoldenRodYellow);
+  ground->toggleDraggable();
+  scene.push_back(ground);
 }
 
 //--------------------------------------------------------------
@@ -194,16 +198,28 @@ void ofApp::draw() {
   //
   for (size_t i = 0; i < scene.size(); i++) {
     if (scene[i]->isSelected) {
+      // scene[i]->print();
       ofSetColor(255, 100, 0);
+      scene[i]->draw();
+
     } else {
       ofSetColor(scene[i]->diffuseColor);
+
+      scene[i]->draw();
+      // scene[i]->print();
+      // std::cout << scene[i]->diffuseColor << std::endl;
     }
-    scene[i]->draw();
+    // std::cout << scene[i]->diffuseColor << std::endl;
   }
 
   // draw lights
   for (size_t i = 0; i < lights.size(); i++) {
-    ofSetColor(ofColor::white);
+    if (lights[i]->isSelected) {
+      ofSetColor(255, 100, 0);
+
+    } else {
+      ofSetColor(ofColor::white);
+    }
     lights[i]->draw();
     lights[i]->setIntensity(*lightIntensity[i]);
   }
@@ -266,6 +282,7 @@ void ofApp::keyReleased(int key) {
     break;
   case 'n':
     scene.push_back(new Sphere(glm::vec3(0, 0, 0), 1.0, ofColor::violet));
+    // dynamic_cast<Mesh*>(highlightedShape)->drawNormals(10);
     break;
   case 'r':
     if (bShowImage == false) {
@@ -335,9 +352,14 @@ void ofApp::rayTrace() {
         // n)p .
         count += 1;
         ofColor color = lambert_phong(nearestIntersectPos, nearestIntersectNorm,
-                                      closestShape->diffuseColor,
-                                      ofColor::lightYellow, phongExponent);
-
+                                      closestShape->diffuseColor, ofColor::pink,
+                                      phongExponent);
+        if (dynamic_cast<Mesh *>(closestShape) != nullptr) {
+          // mesh
+          // std::cout << closestShape->diffuseColor << " " << color <<
+          // std::endl;
+          std::cout << nearestIntersectNorm << " " << color << std::endl;
+        }
         image.setColor(j, i, color);
       } else {
 
@@ -346,7 +368,7 @@ void ofApp::rayTrace() {
     }
   }
   image.update();
-  cout << "\033[32m" << count << "\033[0m" << endl;
+  // cout << "\033[32m" << count << "\033[0m" << endl;
 }
 ofColor ofApp::lambert(const glm::vec3 &p, const glm::vec3 &norm,
                        const ofColor diffuse) {
@@ -429,6 +451,7 @@ void ofApp::mouseDragged(int x, int y, int button) {
   // drag in the plane of the camera
   if (highlightedShape != nullptr and highlightedShape->isSelected == true) {
     // disable camera and do dragging.
+    // highlightedShape->print();
     draggingOn = true;
 
     mainCam.disableMouseInput();
@@ -437,23 +460,21 @@ void ofApp::mouseDragged(int x, int y, int button) {
     normalPlane.position = shapeIntersectionPoint;
     normalPlane.normal = theCam->getZAxis();
 
-    
-    std::cout << normalPlane.normal << std::endl;
+    // std::cout << normalPlane.normal << std::endl;
     // std::cout << normal << std::endl;
-    Ray ray(theCam->getPosition(), glm::normalize(worldPoint - theCam->getPosition()));
+    Ray ray(theCam->getPosition(),
+            glm::normalize(worldPoint - theCam->getPosition()));
     glm::vec3 intersectionPoint;
     [[maybe_unused]] glm::vec3 normalVec; // unused
     if (normalPlane.intersect(ray, intersectionPoint, normalVec)) {
-      // offset the closestShapesPosition by intersectionPoint -
-      // closestShape.position
-
-      // std::cout << highlightedShape->position << std::endl;;
-      // glm::vec3 currentVector = intersectionPoint - theCam->getPosition();
-      highlightedShape->position  = intersectionPoint - offsetIntersectionPoint;
-      
-      // offsetIntersectionPoint = highlightedShape->position - intersect ionPoint;
-      // std::cout << highlightedShape->position << std::endl;;
-      
+      Mesh *temp = dynamic_cast<Mesh *>(highlightedShape);
+      if (temp == nullptr) {
+        
+        highlightedShape->position =
+            intersectionPoint - offsetIntersectionPoint;
+      } else {
+        temp->setOffset(intersectionPoint - shapeIntersectionPoint);
+      }
     }
   }
   if (highlightedShape == nullptr or highlightedShape->isSelected == false) {
@@ -466,24 +487,35 @@ void ofApp::mousePressed(int x, int y, int button) {
   glm::vec3 worldPoint = theCam->screenToWorld(glm::vec3(x, y, 0));
   float closestDistance = std::numeric_limits<float>::max();
   highlightedShape = nullptr;
-  
-  for (auto element : scene) {
-    Ray ray(worldPoint, glm::normalize(worldPoint - theCam->getPosition()));
-    glm::vec3 p, n;
-    if (element->intersect(ray, p, n)) {
-      float distance = glm::distance(p, worldPoint);
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        highlightedShape = element;
-        offsetIntersectionPoint = p - element->position;
-        shapeIntersectionPoint = p;
+  auto processElement = [&](auto element) {
+    if (element->isDraggable) {
+      Ray ray(worldPoint, glm::normalize(worldPoint - theCam->getPosition()));
+      glm::vec3 p, n;
+      if (element->intersect(ray, p, n)) {
+        float distance = glm::distance(p, worldPoint);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          highlightedShape = element;
+          offsetIntersectionPoint = p - element->position;
+          shapeIntersectionPoint = p;
+        }
+        // std::cout << "intersected";
+        // element->print();
       }
+      element->isSelected = false; // regardless just make it
     }
-    element->isSelected = false; // regardless just make it
+  };
+  for (auto element : scene) {
+
+    processElement(element);
   }
+  for (auto light : lights) {
+    processElement(light);
+  }
+
   if (highlightedShape != nullptr) {
     highlightedShape->isSelected = true;
-    
+    // highlightedShape->print();
     // cout intersects pointd
     // else
     // cout << "no intersection" << endl;

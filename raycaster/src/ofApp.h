@@ -55,7 +55,7 @@ public:
   ofxFloatSlider spectacularCoefficient;
   ofxIntSlider phongExponent;
   ofxPanel gui;
-
+  Plane* ground;
   ofxPanel lighting;
   std::vector<ofxIntSlider *> lightIntensity;
   int lightStartIntensity = 50;
