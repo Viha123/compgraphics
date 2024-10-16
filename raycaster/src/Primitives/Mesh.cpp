@@ -6,6 +6,7 @@
 #include "ofFileUtils.h"
 #include "ofGraphics.h"
 #include <cassert>
+#include <fstream>
 #include <string>
 #include <system_error>
 Mesh::Mesh() {}
@@ -18,8 +19,10 @@ void Mesh::loadFile(ofFile file) {
 }
 
 void Mesh::computeNormals() {
+  normalVectors.clear();
   float beta = 0.33;
   float gamma = 0.33;
+  std::ofstream outFile("meshNormals.txt");
   
   for (auto triangle : triangleIndex) {
     // std::cout << triangle[0] << " " << triangle[1] << " " << triangle[2] <<
@@ -28,12 +31,19 @@ void Mesh::computeNormals() {
                   beta * (triangles[triangle[1]] - triangles[triangle[0]]) +
                   gamma * (triangles[triangle[2]] - triangles[triangle[0]]);
 
-    auto cross = computeCrossProduct((center - triangles[triangle[1]]),
-                                     (center - triangles[triangle[0]]));
+    auto cross = glm::normalize(glm::cross((center - triangles[triangle[1]]),
+                                     (center - triangles[triangle[0]])));
 
     // center and cross product
     normalVectors.push_back({center, cross});
   }
+  for (const auto &normalVector : normalVectors) {
+    const auto &normal = normalVector[1];
+    outFile << "Normal: (" << normal.x << ", " << normal.y << ", " << normal.z << ")\n";
+  }
+
+  outFile.close();
+
 }
 bool Mesh::intersect(const Ray &ray, glm::vec3 &point, glm::vec3 &normal) {
   bool intersectsObject = false;
@@ -45,12 +55,12 @@ bool Mesh::intersect(const Ray &ray, glm::vec3 &point, glm::vec3 &normal) {
     float t;
     bool intersect = glm::intersectRayTriangle(
         ray.p, ray.d, triangles[triangle[0]], triangles[triangle[1]],
-        triangles[triangle[2]], baryPos, t);
-    if (intersect) {
+        triangles[triangle[2]], baryPos, t); //this t could be negative. because the point is behind the ray
+    if (intersect && t >= 0) {
       if (t < smallestT) {
         smallestT = t;
         point = ray.p + (ray.d) * t;
-        normal = glm::normalize(normalVectors[i][1]) *-1 ;
+        normal = glm::normalize(normalVectors[i][1]) *-1 
       }
       intersectsObject = true;
     }

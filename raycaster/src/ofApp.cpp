@@ -141,12 +141,16 @@ void ofApp::setup() {
   lighting.setup();
   lighting.setPosition(900, 10);
 
-  lights.push_back(new Light(glm::vec3(-4, 2, 2), ofColor::white, lightStartIntensity));
+  lights.push_back(
+      new Light(glm::vec3(-4, 2, 2), ofColor::white, lightStartIntensity));
 
-  lights.push_back(new Light(glm::vec3(5, 2, 3), ofColor::white,lightStartIntensity));
+  // lights.push_back(
+  //     new Light(glm::vec3(5, 2, 3), ofColor::white, lightStartIntensity));
 
-  lights.push_back(new Light(glm::vec3(2, 5, 3), ofColor::white,lightStartIntensity));
-  lights.push_back(new Light(glm::vec3(3, 0, 1), ofColor::white, lightStartIntensity));
+  lights.push_back(
+      new Light(glm::vec3(2, 5, 3), ofColor::white, lightStartIntensity));
+  lights.push_back(
+      new Light(glm::vec3(3, 0, 1), ofColor::white, lightStartIntensity));
 
   for (int i = 0; i < lights.size(); i++) {
     ofxIntSlider *lightIntense = new ofxIntSlider();
@@ -165,20 +169,25 @@ void ofApp::setup() {
   mesh.loadFile(file);
   // mesh.setOffset(glm::vec3(0, -3.5, 0)); // place the mesh in a good spot
 
-  scene.push_back(new Sphere(glm::vec3(3, 0, 1), 1.0, ofColor::blue));
+  scene.push_back(new Sphere(glm::vec3(3, 0, 1), 1.0, ofColor::lightCoral));
 
-  scene.push_back(new Sphere(glm::vec3(-2, 3, 0), 0.5, ofColor::violet));
+  scene.push_back(new Sphere(glm::vec3(-2, 3, 0), 1, ofColor::gold));
 
-  scene.push_back(new Sphere(glm::vec3(-1, 0, 2), 1.5, ofColor::red));
+  scene.push_back(new Sphere(glm::vec3(-1, 0, 2), 1.5, ofColor::darkOliveGreen));
 
   scene.push_back(&mesh);
 
   // // ground plane
   // //
   ground = new Plane(glm::vec3(0, -2, 0), glm::vec3(0, 1, 0),
-                     ofColor::lightGoldenRodYellow);
+                     ofColor::darkOrchid);
   ground->toggleDraggable();
+
+  backgroundPlane =
+      new Plane(glm::vec3(0, 0, -15), glm::vec3(0, 0, 1), ofColor::lightYellow);
+  backgroundPlane->toggleDraggable();
   scene.push_back(ground);
+  scene.push_back(backgroundPlane);
 }
 
 //--------------------------------------------------------------
@@ -315,7 +324,8 @@ float ofApp::computeU(int j) { return (j + 0.5) / imageWidth; }
 float ofApp::computeV(int i) { return (i + 0.5) / imageHeight; }
 void ofApp::rayTrace() {
   image.allocate(imageWidth, imageHeight, ofImageType::OF_IMAGE_COLOR);
-
+  std::ofstream outFile("meshShaders.txt");
+  outFile.clear();
   int count = 0;
   for (int i = 0; i < imageHeight; i++) {
     for (int j = 0; j < imageWidth; j++) {
@@ -350,15 +360,20 @@ void ofApp::rayTrace() {
       if (closestShape != nullptr) {
         // Implementing this equation: c = cr (ca + cl max (0, n · l)) + cl (h ·
         // n)p .
-        count += 1;
+        // count += 1;
         ofColor color = lambert_phong(nearestIntersectPos, nearestIntersectNorm,
                                       closestShape->diffuseColor, ofColor::pink,
-                                      phongExponent);
+                                      phongExponent, count);
+        // ofColor color = lambert(nearestIntersectPos, nearestIntersectNorm,
+        // closestShape->diffuseColor);
         if (dynamic_cast<Mesh *>(closestShape) != nullptr) {
           // mesh
           // std::cout << closestShape->diffuseColor << " " << color <<
           // std::endl;
-          std::cout << nearestIntersectNorm << " " << color << std::endl;
+          // std::cout << nearestIntersectNorm << " " << color << std::endl;
+          outFile << "Normal: (" << nearestIntersectNorm.x << ", "
+                  << nearestIntersectNorm.y << ", " << nearestIntersectNorm.z
+                  << ")\n";
         }
         image.setColor(j, i, color);
       } else {
@@ -367,8 +382,10 @@ void ofApp::rayTrace() {
       }
     }
   }
+  outFile.close();
   image.update();
-  // cout << "\033[32m" << count << "\033[0m" << endl;
+  image.save("raytrace.png");
+  cout << "\033[32m" << count << "\033[0m" << endl;
 }
 ofColor ofApp::lambert(const glm::vec3 &p, const glm::vec3 &norm,
                        const ofColor diffuse) {
@@ -397,14 +414,15 @@ ofColor ofApp::lambert(const glm::vec3 &p, const glm::vec3 &norm,
 }
 ofColor ofApp::lambert_phong(const glm::vec3 &p, const glm::vec3 &norm,
                              const ofColor diffuse, const ofColor spectacular,
-                             float power) {
+                             float power, int &count) {
   // spectacular is the color of your highlights
   // power is the power exponent between 10 and 10000
   float totalPhong = 0;
   float totalLambert = 0;
   float ambient = 0.25;
+  SceneObject *closest = nullptr;
   for (auto light : lights) {
-    glm::vec3 offset = glm::vec3(0.01, 0.01, 0.01);
+    glm::vec3 offset = glm::vec3(0.1, 0.1, 0.1);
     Ray shadowRay(p + offset, glm::normalize(light->position - (p + offset)));
     float distanceToLight = glm::distance(p, light->position);
     bool inShadow = false;
@@ -412,20 +430,27 @@ ofColor ofApp::lambert_phong(const glm::vec3 &p, const glm::vec3 &norm,
       glm::vec3 intersectPoint;
       glm::vec3 intersectNormal;
       if (object->intersect(shadowRay, intersectPoint, intersectNormal)) {
+
         float distanceToIntersection = glm::distance(p, intersectPoint);
         if (distanceToIntersection < distanceToLight) {
           inShadow = true;
           break;
+
         }
       }
+    }
+    if (!inShadow && dynamic_cast<Mesh *>(closest) != nullptr) {
+      count++; // Increment count only if the closest object is a Mesh and not
+               // in shadow
     }
 
     if (!inShadow) {
 
       glm::vec3 lightVec = glm::normalize(light->position - p);
       glm::vec3 normalizedN = glm::normalize(norm);
-      glm::vec3 bisector =
-          (normalizedN + lightVec) / glm::length(lightVec + normalizedN);
+      glm::vec3 viewVec = glm::normalize(renderCam.position - p); // View vector
+
+      glm::vec3 bisector = glm::normalize(viewVec + lightVec);
       float r = glm::distance(light->position, p);
       float spectacularLight =
           spectacularCoefficient * (light->intensity / glm::pow(r, 2)) *
@@ -469,7 +494,7 @@ void ofApp::mouseDragged(int x, int y, int button) {
     if (normalPlane.intersect(ray, intersectionPoint, normalVec)) {
       Mesh *temp = dynamic_cast<Mesh *>(highlightedShape);
       if (temp == nullptr) {
-        
+
         highlightedShape->position =
             intersectionPoint - offsetIntersectionPoint;
       } else {

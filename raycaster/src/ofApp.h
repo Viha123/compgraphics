@@ -43,7 +43,7 @@ public:
                   const ofColor diffuse);
   ofColor lambert_phong(const glm::vec3 &p, const glm::vec3 &norm,
                         const ofColor diffuse, const ofColor spectacular,
-                        float power);
+                        float power, int& count);
 
   float computeU(int i);
   float computeV(int j);
@@ -55,7 +55,8 @@ public:
   ofxFloatSlider spectacularCoefficient;
   ofxIntSlider phongExponent;
   ofxPanel gui;
-  Plane* ground;
+  Plane *ground;
+  Plane *backgroundPlane;
   ofxPanel lighting;
   std::vector<ofxIntSlider *> lightIntensity;
   int lightStartIntensity = 50;
@@ -79,6 +80,6 @@ public:
   SceneObject *highlightedShape = nullptr;
   glm::vec3 prevVector;
   // glm::vec3 offsetIntersectionPoint;
-  int imageWidth = 600;
-  int imageHeight = 400;
+  int imageWidth = 800;
+  int imageHeight = 600;
 };
