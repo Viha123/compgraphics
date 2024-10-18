@@ -1,4 +1,5 @@
 #include "ofApp.h"
+#include "ofGraphics.h"
 
 // Intersect Ray with Plane  (wrapper on glm::intersect*)
 //
@@ -49,7 +50,40 @@ bool Plane::intersect(const Ray &ray, glm::vec3 &point,
   float h = background.getHeight();
   return insidePlane;
 }
+void Box::init() { box.set(size); }
+void Box::draw() {
+  glm::mat4 m = getMatrix();
+  ofPushMatrix();
+  ofMultMatrix(m);
+  box.draw();
+  ofPopMatrix();
+}
+bool Box::intersect(const Ray &ray, glm::vec3 &point, glm::vec3 &normal) {
+  vector<ofMeshFace> triangles = box.getMesh().getUniqueFaces();
+  glm::mat4 m = getMatrix();
+  for (auto triangle : triangles) {
+    glm::vec3 v1 = m * glm::vec4(triangle.getVertex(0), 1.0);
+    glm::vec3 v2 = m * glm::vec4(triangle.getVertex(1), 1.0);
+    glm::vec3 v3 = m * glm::vec4(triangle.getVertex(2), 1.0);
 
+    normal = glm::cross(glm::normalize(v3 - v2), glm::normalize(v1 - v2));
+
+    // first check if ray is on correct side of triangle
+    //
+    if (glm::dot(ray.d, normal) >= 0.0)
+      continue;
+
+    // check ray/triangle intersection
+    //
+    glm::vec2 baryPoint;
+    float t;
+    if (glm::intersectRayTriangle(ray.p, ray.d, v1, v2, v3, baryPoint, t)) {
+      point = ray.p + (ray.d * t);
+      return true;
+    }
+  }
+  return false;
+}
 void Pyramid::init() {
 
   v.clear();
@@ -247,6 +281,11 @@ void ofApp::keyPressed(int key) {
     scene.push_back(pyramid);
     break;
   }
+  case 'b': {
+    Box *box = new Box();
+    scene.push_back(box);
+    break;
+	}
   case 's': {
     Sphere *sphere = new Sphere();
     scene.push_back(sphere);
