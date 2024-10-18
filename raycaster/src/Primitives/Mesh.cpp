@@ -56,11 +56,11 @@ bool Mesh::intersect(const Ray &ray, glm::vec3 &point, glm::vec3 &normal) {
     bool intersect = glm::intersectRayTriangle(
         ray.p, ray.d, triangles[triangle[0]], triangles[triangle[1]],
         triangles[triangle[2]], baryPos, t); //this t could be negative. because the point is behind the ray
-    if (intersect && t >= 0) {
+    if (intersect) {
       if (t < smallestT) {
         smallestT = t;
         point = ray.p + (ray.d) * t;
-        normal = glm::normalize(normalVectors[i][1]) *-1 
+        normal = glm::normalize(normalVectors[i][1]) *-1;
       }
       intersectsObject = true;
     }

@@ -30,7 +30,7 @@ public:
 
     plane.setResolution(4, 4);
     plane.drawWireframe();
-
+    //here quarternion stuff
     // plane.draw();
     
   }
